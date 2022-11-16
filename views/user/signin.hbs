@@ -1,0 +1,38 @@
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Signin  Page</title>
+    <link rel="stylesheet" href="/users/signin.css" />
+
+  </head>
+  <body>
+    <div class="content">
+      <div class="flex-div ">
+        <div class="name-content">
+          <h1 class="logo"></h1>
+          <img src="/users/img/electronecsmart.png " width="400px">
+          <p>Get access to your Orders, Wishlist and Recommendations</p>
+        </div>
+          <form action="/signin" method="POST">
+          <p style="color: red;">{{banErr}}</p>
+            <label for="" class="form-label">Email</label> <p style="color: red;">{{emailErr}}</p> 
+            <p style="color: red;">{{userErr}}</p>   
+            <input type="text" name="email" placeholder="Enter a your Email"  />
+            <label for="" class="form-label">Password</label> <p style="color: red;">{{passErr}}</p>  
+            <input type="password" name="password" placeholder="Password" >
+            <button type="submit" class="login">Log In</button>
+            <a href="#">Forgot Password ?</a>
+            <hr>
+           
+            <button class="create-account"><a style="color: white;" href="/signup">Create New Account</a></button>
+          </form>
+      </div>
+    </div>
+  </body>
+</html>
+
+
+
