@@ -1,0 +1,565 @@
+{{> layouts}}
+<!-- Featured Start -->
+
+<style>
+    .card-border {
+        border: 1px solid #c2cfd6;
+        border-radius: 15px;
+        height: 265px;
+    }
+
+    .background-white {
+        background: #c8bdbd border-radius: 15px;
+        border: 0p solid;
+    }
+
+    .payment-card h4 {
+        border-bottom: 1px solid #c2cfd6;
+        padding-bottom: 5px;
+        margin: 0 0 15px 0;
+    }
+
+    .payment-card [type="radio"] {
+        cursor: pointer;
+        display: inline-block;
+        float: left;
+        border: 5px solid #aaaaaa;
+        border-radius: 100%;
+        height: 20px;
+        width: 20px;
+        top: 30px;
+        left: 20px;
+        transition: border 0.25s linear;
+        -webkit-transition: border 0.25s linear;
+        margin: 0 10px 0 0;
+    }
+
+    .payment-card img {
+        position: absolute;
+        top: 57px;
+        right: 35px;
+    }
+
+    .payment-card .footer {
+        margin-top: 34px;
+    }
+
+    .payment-card .footer a {
+        color: #337ab7;
+    }
+
+    .payment-card .footer a:first-child {
+        margin-right: 7px;
+    }
+</style>
+
+
+<style>
+    .checkout-progress-indicator {
+        display: block;
+        position: relative;
+        height: 50px;
+        width: 100%;
+        border-bottom: 5px solid #009587;
+        font-family: 'Varela Round', sans-serif;
+    }
+
+    .checkout-progress-indicator .step span.description {
+        display: inline;
+        font-family: 'Varela Round', sans-serif;
+        font-size: 20px;
+    }
+
+    .checkout-progress-indicator .step.active {
+        color: #009587;
+    }
+
+    .checkout-progress-indicator .step {
+        display: block;
+        position: relative;
+        padding-bottom: 15px;
+        text-align: left;
+        float: left;
+        margin-right: 30px;
+        font-family: 'Varela Round', sans-serif;
+    }
+
+    .checkout-progress-indicator .step.active .number {
+        background: #009587;
+    }
+
+    .checkout-progress-indicator .step span.number {
+        position: relative;
+        top: -5px;
+        margin-right: 5px;
+        height: 30px;
+        width: 30px;
+        background: #000;
+        color: #fff;
+        line-height: 30px;
+        text-align: center;
+        font-size: 14px;
+        background: #000;
+        border-radius: 15px;
+        display: inline-block;
+        zoom: 1;
+        vertical-align: top;
+    }
+
+    .checkout-progress-indicator .step.active:after {
+        content: '';
+        display: block;
+        width: 0;
+        height: 0;
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        margin-left: 2px;
+        z-index: 1;
+        border-left: 13px solid transparent;
+        border-right: 13px solid transparent;
+        border-bottom: 13px solid #009587;
+        top: 32px;
+    }
+
+    .order-details h2 {
+        margin: 0 0 40px;
+        padding: 0 0 12px;
+        border-bottom: 5px solid #eaeaea;
+
+    }
+
+    .od-box {
+        margin: 0 0 30px;
+        padding: 30px;
+        border: 1px solid #ccc;
+    }
+
+    .cart-item {
+        width: 100%;
+        display: inline-block;
+    }
+
+    .mini-cart-product {
+        min-height: 100px;
+        border-bottom: 1px dotted #ccc;
+    }
+
+    .mini-cart-name {
+        padding-top: 12px;
+        line-height: 1;
+        font-size: 1em;
+        margin-bottom: 5px;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
+
+    span.mini-cart-price {
+        text-transform: uppercase;
+        font-size: 0.95em;
+    }
+
+    .mini-cart-name a {
+        color: #333;
+    }
+
+    .mini-cart-pricing .label {
+        display: block;
+        float: left;
+        min-width: 29%;
+        width: auto;
+        padding: 0 5px 0 0;
+        font-size: 0.95em;
+        line-height: 16px;
+        text-transform: uppercase;
+        text-align: left;
+        color: #333;
+    }
+
+    .mini-cart-pricing .value {
+        display: block;
+        float: left;
+        max-width: 70%;
+        width: auto;
+        color: #999;
+        font-size: 0.95em;
+        line-height: 16px;
+    }
+
+    .cart-image {
+        width: 33%;
+        padding-top: 10px;
+        float: left;
+        height: 110px;
+    }
+
+    .cart-details {
+        float: left;
+        width: 65%;
+    }
+</style>
+
+
+
+
+<body>
+    {{> userHeader}}
+
+
+
+    <div class="container mt-5">
+        <a class="btn btn-success float-right" href="#" data-bs-toggle="modal" data-bs-target="#exampleModal">
+            <i class="icon-shopping-cart icon-large"></i> Add address</a>
+        <h3>Delvery Address</h3>
+        <hr />
+        <div class="row">
+            {{#each address.address}}
+
+            <div class="col-md-4 col-sm-6 payment-card">
+                <div class="well background-white card-border p-3">
+                    <input type="radio" checked id="index" value="{{@index}}" name="radiobtn">
+                    <h4>
+                        Address
+                    </h4>
+
+
+                    <h6 class="text-center">{{this.name}} </h6>
+                    <h6 class="text-center">{{this.address}}</h6>
+                    <h6 class="text-center">{{this.phone}} </h6>
+                    <h6 class="text-center">{{this.city}}</h6>
+                    <h6 class="text-center">{{this.pincode}}</h6>
+                    <h6 class="text-center">{{this.state}}</h6>
+
+
+                </div>
+            </div>
+            {{/each}}
+
+            <div class="row">
+
+
+                <div class="col-lg-6">
+                    <div class="discount__content mt-5">
+                        <h6>Discount codes</h6>
+                        <div style="width: 80%;">
+                            <div class="form-group"> <label>Have coupon?</label>
+                                <div class="input-group"> <input type="text" id="couponCheckId"
+                                        class="form-control coupon" name="coupon" placeholder="Enter a Coupon code">
+                                    <span class="input-group-append"> <button style="background-color: #ffc107;"
+                                            id="couponCheck" class="btn btn btn-apply coupon ml-2">Apply</button>
+                                        <i class="icon-long-arrow-right"></i>
+
+
+                                    </span>
+                                    <button style="background-color: #ff1c07;" id="couponCancel" class="d-none ml-2">
+                                        Cancel</button>
+                                </div>
+
+                                <span id="insertcoupon" class="float-right mt-4"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 offset-lg-2">
+
+                    <div class="checkout__order">
+                        <h5>Your order</h5>
+                        <form action="" id="checkout-form">
+                            <div class="checkout__order__product">
+                                <ul>
+                                    <li>
+                                        <span class="top__text">Product</span>
+
+                                        {{#each product}}
+                                        <li style="color:#ca1515;;" class="top__text__right mt-2">{{this.item.name}}</li>
+                                        {{/each}}
+
+                                </ul>
+                            </div>
+
+                            <div class="checkout__order__total">
+                                <ul>
+                                    <li>discount ₹<span id="discount"></span></li>
+                                    <li>Total ₹<span id="total">{{total}}</span></li>
+                                </ul>
+                            </div>
+                            <h6>Payment method</h6>
+                            <label class="radio-inline p-2">
+                                <input type="radio" name="payment-method" value="COD" checked>cash on delivery
+                            </label>
+                            <label class="radio-inline mt-2">
+                                <input type="radio" name="payment-method" value="ONLINE">online payment
+                            </label>
+                            <div class="checkout__order__widget">
+
+                                <p>you can choose bothe side</p>
+                            </div>
+
+                            <button type="submit" class="site-btn">Place oder</button>
+                    </div>
+                    </form>
+                </div>
+
+
+
+
+
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <form action="/add-address" method="POST">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Add address</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+
+                                    <div class="col-lg-12">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <strong>Address</strong>
+
+                                            </div>
+                                            <div class="card-body card-block">
+                                                <div class="form-group">
+                                                    <label for="country" class=" form-control-label">Name</label>
+                                                    <input type="text" name="name" id="name"
+                                                        placeholder="Enter your name" class="form-control">
+                                                </div>
+                                                <div class="col col-md-12 col-lg-12">
+                                                    <label for="" class="form-control-label">Address</label>
+                                                </div>
+                                                <div class="col-12 col-md-12 col-lg-12">
+                                                    <textarea name="address" id="address" rows="9"
+                                                        placeholder="Enter you delivery address"
+                                                        class="form-control"></textarea>
+                                                </div>
+                                                <div class="col-8">
+                                                    <div class="form-group">
+                                                        <label for="city"
+                                                            class=" form-control-label">City/street</label>
+                                                        <input type="text" name="city" id="city"
+                                                            placeholder="Enter your city or street"
+                                                            class="form-control">
+                                                    </div>
+                                                </div>
+                                                <div class="col-8">
+                                                    <div class="form-group">
+                                                        <label for="postal-code" class=" form-control-label">Pin
+                                                            code</label>
+                                                        <input type="number" name="pincode" id="pincode"
+                                                            placeholder="Enter your pin code" class="form-control">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="street" class=" form-control-label">phone</label>
+                                                    <input type="text" name="phone" id="mobile"
+                                                        placeholder="Enter youe mobile number" class="form-control">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="country" class=" form-control-label">State</label>
+                                                    <input type="text" name="state" id="state"
+                                                        placeholder="Enter your state" class="form-control">
+                                                    {{!-- <input type="text" name="userId" id value="{{user._id}}"
+                                                        hidden> --}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary">Save</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                {{> userFooter}}
+                <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+                <script>
+                    $("#checkout-form").submit((e) => {
+                        e.preventDefault()
+                        //address select default
+                        let coupons = $("#couponCheckId").val()
+                        let checkAddress;
+                        let address = document.querySelectorAll('input[name="radiobtn"]')
+                        for (address of address) {
+                            if (address.checked) {
+                                checkAddress = address.value
+                                break
+
+                            }
+                        }
+
+                        Swal.fire({
+                            title: 'Are you sure?',
+                            text: "Are you sure want to confirm this order",
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Yes, confirm order '
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                $.ajax({
+                                    url: '/place-order',
+                                    method: 'post',
+                                    data: $('#checkout-form').serialize() + '&radiobtn=' + checkAddress + '&coupon=' + coupons,
+                                    success: (response) => {
+
+                                        if (response.address == false) {
+                                            Swal.fire({
+                                                title: 'Create an address',
+                                                text: "You don't have an address !",
+                                                icon: 'warning',
+                                                showCancelButton: true,
+                                                confirmButtonColor: '#3085d6',
+                                                cancelButtonColor: '#d33',
+                                                confirmButtonText: 'Yes,Create it!'
+                                            })
+                                            setTimeout(() => {
+                                                window.location.href = '/account'
+                                            }, 1500)
+                                        } else  {
+                                            if (response.status) {
+                                                setTimeout(() => {
+                                                    window.location.href = '/order-success'
+                                                }, 1700)
+                                            } else {
+                                                razorpayPayment(response)
+                                            }
+                                        }
+
+                                    }
+
+                                })
+
+                            }
+                        })
+
+                    })
+                </script>
+                <script>
+                    function razorpayPayment(order) {
+
+                        var options = {
+                            "key": "rzp_test_Qb7Rw3E5m4cY6D", // Enter the Key ID generated from the Dashboard
+                            "amount": order.order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+                            "currency": "INR",
+                            "name": "ElectronicsMart",
+                            "description": "Test Transaction",
+                            "image": "https://example.com/your_logo",
+                            "order_id": order.order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+                            "callback_url": "https://eneqd3r9zrjok.x.pipedream.net/",
+                            "prefill": {
+                                "name": "Gaurav Kumar",
+                                "email": "gaurav.kumar@example.com",
+                                "contact": "9999999999"
+                            },
+                            "notes": {
+                                "address": "Razorpay Corporate Office"
+                            },
+                            "theme": {
+                                "color": "#3399cc"
+                            },
+                            "handler": function (response) {
+                                verifyPayment(response, order.order)
+                            }
+
+
+
+                        };
+                        var rzp1 = new Razorpay(options);
+                        rzp1.open();
+                    }
+                    function verifyPayment(payment, order) {
+                        $.ajax({
+                            url: '/verify-payment',
+                            method: 'post',
+                            data: {
+                                payment,
+                                order
+                            },
+                            success: ((response) => {
+                                console.log('first vannu')
+                                if (response.status) {
+
+                                    window.location.href = '/order-success'
+                                } else {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Payment failed',
+                                        text: 'Something went wrong!',
+                                        footer: '<a href="">Why do I have this issue?</a>'
+                                    })
+
+                                }
+                            })
+                        })
+                    }
+
+
+                </script>
+
+                <script>
+
+                    $('#couponCheck').click(function () {
+                        const couponCheckId = $('#couponCheckId').val()
+                        const totalValue = parseInt($('#total').html())
+                        
+
+                        $.ajax({
+                            url: '/admin/check-coupon',
+                            method: 'post',
+                            data: {
+                                couponCheckId,
+                            },
+                            success: ((response) => {
+                                if (response.status) {
+                                    if (response.coupon.type === 'percentage') {
+                                        let disc = response.coupon.discount * totalValue / 100
+                                        $('#insertcoupon').removeClass('text-danger').addClass('text-success').html('coupon Applied')
+                                        $('#couponCancel').removeClass('d-none')
+                                        $('#total').html(totalValue - disc)
+                                        $('#couponCheckId').attr('readonly', 'true');
+                                        $('#couponCheck').addClass('d-none');
+                                        $('#discount').html(disc)
+
+                                    } else {
+                                        $('#insertcoupon').removeClass('text-danger').addClass('text-success').html('coupon Applied')
+                                        $('#total').html(totalValue - response.coupon.discount)
+                                        console.log(totalValue-response.coupon.discount)
+                                        $('#couponCheckId').attr('readonly', 'true');
+                                        $('#couponCheck').addClass('d-none');
+                                        $('#couponCancel').removeClass('d-none');
+                                        $('#discount').html(response.coupon.discount)
+                                    }
+
+
+                                }else{
+                                      $('#insertcoupon').addClass('text-danger').html(response.couponErr)
+                                }
+                            })
+                        })
+
+                        $('#couponCancel').click(function(){
+                            location.reload()
+                        })
+
+                    })
+                </script>
+
+
+
+</body>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script >

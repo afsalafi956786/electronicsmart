@@ -1,0 +1,132 @@
+{{> adminLayout}}
+
+{{> adminHeader}}
+<!-- END HEADER DESKTOP-->
+<div class="main-content ml-5">
+    <div class="section__content section__content--p30">
+        <div class="container-fluid">
+
+            <div class="mt-5 col-lg-9 ">
+                <div class="card align">
+                    <div style="background-color: rgb(48, 46, 46);" class="card-header">
+                        <strong style="color: white;">Edit Product</strong>
+                    </div>
+                    <div class="card-body card-block">
+                        <form action="/admin/product/editProduct?_id={{products._id}}" method="POST"
+                            enctype="multipart/form-data" class="form-horizontal">
+
+                            <div class="row form-group">
+                                <div class="col col-md-3">
+
+                                    <label for="text-input" class=" form-control-label">Name</label>
+                                </div>
+                                <div class="col-12 col-md-9">
+                                    <input type="text" id="text-input" name="name" value="{{products.name}}"
+                                        class="form-control" required>
+
+                                </div>
+                            </div>
+
+                            <div class="row form-group">
+                                <div class="col col-md-3">
+                                    <label for="" class=" form-control-label">Category</label>
+                                </div>
+                                <div class="col-12 col-md-9">
+                                    <select style="color: grey;" class="form-select "
+                                        aria-label="Default select example">
+
+                                        <option value="" disabled selected>Select your Category</option>
+                                        {{#each categories}}
+                                        <option value="">{{this.category}}</option>
+                                        {{/each}}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row form-group ">
+                                <div class="col col-md-3">
+                                    <label for="t" class=" form-control-label">price</label>
+                                </div>
+                                <div class="col-6 col-md-6 col-lg-6 ">
+                                    <input type="number" id="" value="{{products.price}}" name="price"
+                                        class="form-control" required>
+
+                                </div>
+                            </div>
+
+                            <div class="row form-group">
+                                <div class="col col-md-3">
+                                    <label for="" class=" form-control-label">Description</label>
+                                </div>
+                                <div class="col-12 col-md-9">
+                                    <textarea name="description" rows="9"
+                                        class="form-control">{{products.description}}</textarea>
+                                </div>
+                            </div>
+
+                            <div class="row form-group ">
+                                <div class="col col-md-3">
+                                    <label for="email-input" class=" form-control-label">stock</label>
+                                </div>
+                                <div class="col-12 col-md-9">
+                                    <input type="text" id="" value="{{products.stock}}" name="stock"
+                                        class="form-control" required>
+
+                                </div>
+                            </div>
+                            <div class="row form-group ">
+                                <div class="col col-md-3">
+                                    <label for="email-input" class=" form-control-label">Brand</label>
+                                </div>
+                                <div class="col-12 col-md-9">
+                                    <input type="text" id="email-input" value="{{products.brand}}" name="brand"
+                                        class=" form-control" required>
+
+                                </div>
+                            </div>
+                         <div class="row form-group ">
+                                <label for="formFileLg">Image <span class="fw-light fs-6 text-black-50"> ( You can
+                                        choose multiple images)</span></label><br>
+                                <input type="file" onchange="previewMultiples(event)" name="image"
+                                    class="form-control bg-white" id="formFileLg" multiple>
+                                <div id="galeria1" class="mt-2">
+                                    {{#each products}}
+                                    <img style="width: 100px;height:auto;" src="/admin/productImage/{{this.product_image.[0].filename}}" alt="">
+                                    <img style="width: 100px;height:auto;" src="/admin/productImage/{{this.product_image.[1].filename}}" alt="">
+                                    <img style="width: 100px;height:auto;" src="/admin/productImage/{{this.product_image.[2].filename}}" alt="">
+                                    <img style="width: 100px;height:auto;" src="/admin/productImage/{{this.product_image.[3].filename}}" alt="">
+                                    {{/each}}
+                                </div>
+                            </div>
+                            <script>
+                                let k = 0
+                                function previewMultiples(event) {
+
+                                    var saida = document.getElementById('formFileLg');
+                                    var quantos = saida.files.length
+                                    document.getElementById("galeria1").innerHTML = '';
+
+                                    for (i = 0; i < 5; i++) {
+                                        var urls = URL.createObjectURL(event.target.files[i]);
+                                        document.getElementById('galeria1').innerHTML += '<img style="width:70px;" class="ml-1" src="' + urls + '">'
+
+                                    }
+
+
+                                }
+                            </script>
+                    </div>
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-primary btn-sm">
+                            <i class="fa fa-dot-circle-o"></i> Submit
+                        </button>
+                          <a href="/admin/product">
+                        <button type="button" class="btn btn-danger btn-sm">Cancel</button>
+                        </a>
+                    </div>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{{> adminScript}}

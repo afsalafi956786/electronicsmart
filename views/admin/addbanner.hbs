@@ -1,0 +1,133 @@
+{{> adminLayout}}
+{{> adminHeader}}
+<!-- END HEADER DESKTOP-->
+<div class="main-content ml-5">
+    <div class="section__content section__content--p30">
+        <div class="container-fluid">
+
+            <div class="mt-5 col-lg-9 ">
+                <div class="card align">
+                    <div style="background-color: rgb(48, 46, 46);" class="card-header">
+                        <strong style="color: white;">Add Banner</strong>
+                    </div>
+                    <div class="card-body card-block">
+                        <form action="/admin/add-banner" method="POST" class="form-horizontal"
+                            enctype="multipart/form-data">
+                            <div class="row form-group">
+                                <div class="col col-md-3">
+                                    <label for="text-input" placeholder="Enter coupon code" class=" form-control-label"
+                                        >Offer title</label>
+                                </div>
+                                <div class="col-12 col-md-9">
+                                    <input type="text" id="text-input" name="title" placeholder="Enter the title"
+                                        class="form-control" required>
+
+                                </div>
+                            </div>
+
+                            <div class="row form-group">
+                                <div class="col col-md-3">
+                                    <label for="" class=" form-control-label">Description</label>
+                                </div>
+                                <div class="col-12 col-md-9">
+                                    <textarea name="description" id="" rows="4" placeholder="Content..."
+                                        class="form-control" required></textarea>
+                                </div>
+                            </div>
+
+                            <div class="row form-group mt-5">
+                                <div class="col col-md-3">
+                                    <label for="text-input" placeholder="Name" class=" form-control-label"
+                                        required>Product name</label>
+                                </div>
+                                <div class="col-12 col-md-9">
+                                    <input type="text" id="text-input" name="prodcutname"
+                                        placeholder="Enter product name" class="form-control" required>
+
+                                </div>
+                            </div>
+
+                            <div style="background-color: rgb(241, 245, 242);" class="card-header ">
+                                <strong style="color: white;"></strong>
+
+
+                                <div class="row form-group">
+                                    <div class="col col-md-3">
+                                        <label class=" form-control-label mt-1"><b>Link</b></label>
+                                    </div>
+
+                                    <div class="row form-group ">
+                                        <div class="col col-md-3">
+                                            <label for="text-input" placeholder="Name" class=" form-control-label"
+                                                required>URL</label>
+                                        </div>
+                                        <div class="col-12 col-md-9">
+                                            <input type="text" id="text-input" name="url" placeholder="copy URL"
+                                                class="form-control" required>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="row form-group mt-5">
+                                <div class="col col-md-3">
+                                    <label for="text-input" placeholder="Name" class=" form-control-label"
+                                        required>Price</label>
+                                </div>
+                                <div class="col-12 col-md-9">
+                                    <input type="number" id="text-input" name="price" placeholder="Enter product Price"
+                                        class="form-control" required>
+
+                                </div>
+                            </div>
+
+                           
+
+
+                            <div style="background-color: rgb(241, 245, 242);" class="card-header mt-5">
+                                <strong style="color: rgb(105, 102, 102);">Image</strong>
+                                <p style="color: rgb(175, 175, 175);">You can add banner image down
+                                </p>
+
+                                {{!-- <..image..> --}}
+                                    <p style="color: red;">{{imgErr}}</p>
+                                    <input type="file" class="form-control bg-white" aria-label="Upload" name="image"
+                                        onchange="loadaddFile(event)" id="image">
+                                    <div clas="">
+                                        <img id="imgadd" style="width: 100px;height:auto;"
+                                            src="/admin/productImage/{{this.imgBanner.[0].filename}}" alt="">
+
+                                    </div>
+
+
+                            </div>
+
+                    </div>
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-primary btn-sm">
+                            <i class="fa fa-dot-circle-o"></i> Add banner
+                        </button>
+                        <a href="/admin/banner">
+                            <button type="button" class="btn btn-danger btn-sm ml-3">Cancel</button>
+                        </a>
+                    </div>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{{> adminScript }}
+{{!-- //add img --}}
+<script>
+    var loadaddFile = function (event) {
+        var output = document.getElementById('imgadd');
+        output.src = URL.createObjectURL(event.target.files[0]);
+        output.onload = function () {
+            URL.revokeObjectURL(output.src) // free memory
+        }
+    };
+</script>

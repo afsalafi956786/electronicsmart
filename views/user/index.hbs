@@ -1,0 +1,424 @@
+{{> layouts}}
+
+<!-- Featured Start -->
+
+<body>
+    {{> userHeader}}
+
+    <!-- Categories Section Begin -->
+    <section class="categories">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-6 p-0">
+                    <div class="categories__item categories__large__item set-bg"
+                        data-setbg="/admin/productImage/{{banner.[0].imgBanner.[0].filename}}" alt="">
+                        <div class="categories__text">
+                            <h1 class="float-right text-white">{{banner.[0].prodcutname}}</h1>
+                            <h4></h4>
+
+
+                            <a href="/productDetails?id={{banner.[0].url}}">Shop now</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-6 p-0">
+                            <div class="categories__item set-bg"
+                                data-setbg="/admin/productImage/{{banner.[1].imgBanner.[0].filename}}">
+                                <div class="categories__text">
+
+
+                                    <h3 class="floar-right"><a href="/productDetails?id={{banner.[1].url}}">Shop now</a>
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 p-0">
+                            <div class="categories__item set-bg"
+                                data-setbg="/admin/productImage/{{banner.[2].imgBanner.[0].filename}}" alt="">
+                                <div class="categories__text">
+
+                                    <p>{{banner.[2].price}}</p>
+                                    <a href="/productDetails?id={{banner.[2].url}}">Shop now</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 p-0">
+                            <div class="categories__item set-bg"
+                                data-setbg="/admin/productImage/{{banner.[3].imgBanner.[0].filename}}" alt="">
+                                <div class="categories__text">
+
+                                    <p>{{banner.[3].price}}</p>
+                                    <a href="/productDetails?id={{banner.[3].url}}">Shop now</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 p-0">
+                            <div class="categories__item set-bg"
+                                data-setbg="/admin/productImage/{{banner.[4].imgBanner.[0].filename}}" alt="">
+                                <div class="categories__text">
+                                    <p>{{banner.[4].price}}</p>
+
+
+                                    <a href="/productDetails?id={{banner.[4].url}}">Shop now</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Categories Section End -->
+
+    <!-- Product Section Begin -->
+    <section class="product spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 col-md-4">
+                    <div class="section-title">
+                        <h4>New product</h4>
+                    </div>
+                </div>
+
+                <div class="col-lg-8 col-md-8">
+                    <ul class="filter__controls">
+                        <h4>Top Brands</h4>
+                        {{#each products}}
+                        <li data-filter=".brand">{{this.brand}}</li>
+                        {{/each}}
+
+
+
+                    </ul>
+                </div>
+            </div>
+
+            <div class="row property__gallery">
+                {{#each products}}
+                <div class="col-lg-3 col-md-4 col-sm-6 mix women">
+                    <div class="product__item ">
+                        <div class="product__item__pic set-bg "
+                            data-setbg="/admin/productImage/{{this.product_image.[0].filename}}">
+                            <div class="label new">New</div>
+                            <ul class="product__hover">
+                                <li><a href="/productDetails?id={{this._id}}" class=""><span
+                                            class="arrow_expand"></span></a></li>
+                                <li><a onclick="addToWishlist('{{this._id}}')"><span class="icon_heart_alt"></span></a>
+                                </li>
+
+                                <li><a onclick="addToCart('{{this._id}}')"><span class="icon_bag_alt"></span></a></li>
+                            </ul>
+                        </div>
+                        <div class="product__item__text">
+                            <h6><a href="#">{{this.name}}</a></h6>
+                            <div class="rating">
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                            </div>
+                            <div class="product__price">₹ {{this.price}}</div>
+                        </div>
+                    </div>
+                </div>
+                {{/each}}
+            </div>
+        </div>
+    </section>
+    <!-- Product Section End -->
+
+    <!-- Banner Section Begin -->
+    <section class="banner set-bg" data-setbg="/admin/productImage/{{banner.[5].imgBanner.[0].filename}}">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-7 col-lg-8 m-auto">
+                    <div class="banner__slider owl-carousel">
+                        <div class="banner__item">
+                            <div class="banner__text">
+                                <span>{{banner.[5].title}}</span>
+                                <h1>{{banner.[5].prodcutname}}</h1>
+                                <a href="/productDetails?id={{banner.[3].url}}">Shop now</a>
+                            </div>
+                        </div>
+                        <div class="banner__item">
+                            <div class="banner__text">
+                                <span>{{banner.[5].title}}</span>
+                                <h1>{{banner.[5].prodcutname}}</h1>
+                                <a href="/productDetails?id={{banner.[3].url}}">Shop now</a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Banner Section End -->
+
+    <!-- Trend Section Begin -->
+    <section class="trend spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 col-md-4 col-sm-6">
+                    <div class="trend__content">
+                        <div class="section-title">
+                            <h4>Hot Sale</h4>
+                        </div>
+                        {{#each categories}}
+                        <div class="trend__item">
+                            <div class="trend__item__pic">
+                                <a href="/filter?name={{this.category}}"><img style="cursor: pointer;" width="100px"
+                                        height="auto" src="/admin/productImage/{{this.imgCategory.[0].filename}}"
+                                        alt=""></a>
+                            </div>
+                            <div class="trend__item__text">
+                                <h6>{{this.name}}</h6>
+
+                                <div class="product__price">{{this.price}}</div>
+                            </div>
+                        </div>
+                        {{/each}}
+
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-6">
+                    <div class="trend__content">
+                        <div class="section-title">
+                            <h4>Best seller</h4>
+                        </div>
+                        {{#each hotProducts}}
+                        <div class="trend__item">
+                            <div class="trend__item__pic">
+                                <a href="/productDetails?id={{this._id}}"> <img style="cursor: pointer;" width="100px"
+                                        height="auto" src="/admin/productImage/{{this.product_image.[0].filename}}"
+                                        alt=""></a>
+                            </div>
+                            <div class="trend__item__text">
+                                <a style="text-decoration: none;" href="/productDetails?id={{this._id}}">
+                                    <h6>{{this.name}}</h6>
+                                </a>
+                                <div class="rating">
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                </div>
+                                <div class="product__price">₹ {{this.price}}</div>
+                            </div>
+                        </div>
+                        {{/each}}
+
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-6">
+                    <div class="trend__content">
+                        <div class="section-title">
+                            <h4>Feature</h4>
+                        </div>
+                        {{#each hotProducts}}
+                        <div class="trend__item">
+
+                            <div class="trend__item__pic">
+                                <a href="/productDetails?id={{this._id}}"><img style="cursor: pointer;" width="100px"
+                                        height="auto" src="/admin/productImage/{{this.product_image.[0].filename}}"
+                                        alt=""></a>
+                            </div>
+                            <div class="trend__item__text">
+                                <a style="text-decoration: none;" href="/productDetails?id={{this._id}}">
+                                    <h6>{{this.name}}</h6>
+                                </a>
+                                <div class="rating">
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                </div>
+                                <div class="product__price">$ {{this.price}}</div>
+                            </div>
+                        </div>
+                        {{/each}}
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Trend Section End -->
+
+    <!-- Discount Section Begin -->
+    <section class="discount">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 p-0">
+                    <div class="discount__pic">
+                        <img style="height: 392px;" src="/admin/productImage/{{banner.[6].imgBanner.[0].filename}}"
+                            alt="">
+                    </div>
+                </div>
+                <div class="col-lg-6 p-0">
+                    <div class="discount__text">
+                        <div class="discount__text__title">
+                            <span>Discount</span>
+                            <h2>Summer 2019</h2>
+                            <h5><span>Sale</span> 50%</h5>
+                        </div>
+                        <div class="discount__countdown" id="countdown-time">
+                            <div class="countdown__item">
+                                <span>22</span>
+                                <p>Days</p>
+                            </div>
+                            <div class="countdown__item">
+                                <span>18</span>
+                                <p>Hour</p>
+                            </div>
+                            <div class="countdown__item">
+                                <span>46</span>
+                                <p>Min</p>
+                            </div>
+                            <div class="countdown__item">
+                                <span>05</span>
+                                <p>Sec</p>
+                            </div>
+                        </div>
+                        <a href="/productDetails?id={{banner.[4].url}}">Shop now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Discount Section End -->
+
+    <!-- Services Section Begin -->
+    <section class="services spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-md-4 col-sm-6">
+                    <div class="services__item">
+                        <i class="fa fa-car"></i>
+                        <h6>Free Shipping</h6>
+                        <p>For all oder over $99</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6">
+                    <div class="services__item">
+                        <i class="fa fa-money"></i>
+                        <h6>Money Back Guarantee</h6>
+                        <p>If good have Problems</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6">
+                    <div class="services__item">
+                        <i class="fa fa-support"></i>
+                        <h6>Online Support 24/7</h6>
+                        <p>Dedicated support</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6">
+                    <div class="services__item">
+                        <i class="fa fa-headphones"></i>
+                        <h6>Payment Secure</h6>
+                        <p>100% secure payment</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Services Section End -->
+
+
+
+    {{> userFooter}}
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        //cart do not refresh
+        function addToCart(prodId) {
+            $.ajax({
+                url: '/cart/' + prodId,
+                method: 'get',
+                success: (response) => {
+                    console.log(response)
+                    if (response.status) {
+                        let count = $('#cartcount').html()
+                        count = parseInt(count) + 1
+                        console.log(count)
+                        $("#cartcount").html(count)
+                        Swal.fire({
+                            position: 'center',
+                            icon: 'success',
+                            title: 'Item added to cart',
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+
+                    } else {
+                        Swal.fire({
+                            title: 'Please Login your account',
+                            confirmButtonText:
+                                'Continue <i class="fa fa-arrow-right"></i>',
+                        })
+                        setTimeout(() => {
+                            window.location.href = '/signin'
+                        }, 1300)
+
+                    }
+                }
+            })
+        }
+    </script>
+    <script>
+        //wish list do not refresh
+        function addToWishlist(prodId) {
+
+            $.ajax({
+                url: '/wishlist/' + prodId,
+                method: 'get',
+                success: (response) => {
+                    if (response) {
+                        if (response.notUser) {
+                            Swal.fire({
+                                title: 'Please Login your account',
+                                confirmButtonText:
+                                    'Continue <i class="fa fa-arrow-right"></i>',
+                            })
+                            setTimeout(() => {
+                                window.location.href = '/signin'
+                            }, 1300)
+
+                        } else {
+                            let count = $('#wishcount').html()
+                            count = parseInt(count) + 1
+                            $("#wishcount").html(count)
+                            Swal.fire({
+                                position: 'center',
+                                icon: 'success',
+                                title: 'Item added to wishlist',
+                                showConfirmButton: false,
+                                timer: 1500
+                            })
+                        }
+
+                    } else {
+                        Swal.fire({
+                            position: 'center',
+                            icon: 'success',
+                            title: 'Item deleted from wishlist',
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+
+
+                    }
+
+                }
+            })
+        }
+
+    </script>
+
+
+</body>

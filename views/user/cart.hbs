@@ -1,0 +1,248 @@
+{{> layouts}}
+
+<body>
+    {{> userHeader}}
+
+
+    <!-- Breadcrumb Begin -->
+
+    <div class="breadcrumb-option">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcrumb__links">
+                        <a style="text-decoration: none;" href="/"><i class="fa fa-home"></i> Home</a>
+                        <span>Shopping cart</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Breadcrumb End -->
+
+    <!-- Shop Cart Section Begin -->
+    {{!--
+    {{#if empty}}
+
+    <div>
+        <img src="/admin/productImage/empty-cart (1).png">
+
+    </div>
+    {{else}} --}}
+    <section class="shop-cart spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="shop__cart__table">
+                        <table>
+                            <thead>
+                                <tr>
+
+                                    <th>Product</th>
+                                    <th>Price</th>
+                                    <th>Quantity</th>
+                                    <th>Discount</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                {{#each cart.products}}
+                                <tr>
+
+                                    <td class="cart__product__item">
+                                        <a style="text-decoration:none;" href="/productdetails?id={{this.item._id}}">
+                                            <img style="width: 70px;height:auto;"
+                                                src="/admin/productImage/{{this.item.product_image.[0].filename}}">
+                                            <div class="cart__product__item__title">
+                                                <h6>{{this.item.name}}</h6>
+                                        </a>
+                                        <div class="rating">
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                        </div>
+                    </div>
+                    </td>
+                    <td class="cart__price" id="pricetotal">₹ {{this.item.price}}</td>
+                    <td class="cart__quantity">
+                        {{!-- <div class="pro-qty">
+                            <input type="text" value="{{this.quantity}}">
+                        </div> --}}
+                        <button class="cart-item-count mr-3"
+                            onclick="changeQuantity('{{../cart._id}}','{{this.item._id}}',-1)">-</button>
+                        <span id="{{this.item._id}}">{{this.quantity}}</span><button class="cart-item-count ml-3"
+                            onclick="changeQuantity('{{../cart._id}}','{{this.item._id}}',1)">+</button>
+                    </td>
+                    <td class="cart__total">₹ 100 </td>
+                    <td class="cart__close"><span onclick="deleteCart('{{../cart._id}}','{{this.item._id}}')"
+                            class="icon_close"></span>
+                    </td>
+                    </tr>
+                    {{/each}}
+                    </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6">
+                <div class="cart__btn">
+                    <a href="/">Continue Shopping</a>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6">
+                <div class="cart__btn update__btn">
+                    {{!-- <a href="#"><span class="icon_loading"></span> Update cart</a> --}}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+
+            </div>
+            <div class="col-lg-4 offset-lg-2">
+
+                <div class="cart__total__procced">
+                    <span class="top__text">Product</span>
+                    <ul>
+                        {{#each cart.products}}
+                        <li style="color:#ca1515;;" class="top__text__right mt-2">{{this.item.name}}</li>
+                        {{/each}}
+                    </ul>
+
+                    <h6>Cart total</h6>
+                    <ul>
+                        {{!-- <li>Total discount <span>₹ 750.0</span></li> --}}
+                        <li>Total <span id="total">₹ {{total}}</span></li>
+
+                    </ul>
+                    <p>Delivery<span> Free</span></p>
+                    <a href="/placeOrder" class="primary-btn">Proceed to checkout</a>
+                </div>
+            </div>
+        </div>
+        </div>
+    </section>
+
+    {{!-- {{/if}} --}}
+
+
+    <!-- Shop Cart Section End -->
+
+
+    {{> userFooter}}
+
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+
+    {{!-- //cart count --}}
+
+    <script>
+        //cart do not refresh
+        function addToCart(prodId) {
+            $.ajax({
+                url: '/cart/' + prodId,
+                method: 'get',
+                success: (response) => {
+                    if (response.status) {
+                        let count = $('#cartcount').html()
+                        count = parseInt(count) + 1
+                        $("#cartcount").html(count)
+                        Swal.fire({
+                            position: 'center',
+                            icon: 'success',
+                            title: 'Item added to cart',
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+
+                    } 
+                }
+            })
+        }
+    </script>
+
+    <script>
+        function changeQuantity(cartId, prodId, count) {
+
+            let quantity = parseInt(document.getElementById(prodId).innerHTML)
+
+
+            count = parseInt(count)
+
+            $.ajax({
+                url: '/channgProductQuantity',
+                data: {
+                    cart: cartId,
+                    product: prodId,
+                    count: count,
+                    quantity: quantity
+                },
+                method: 'post',
+                success: (response) => {
+                    if (response.removeProduct) {
+                        Swal.fire(
+                            'Removed!',
+                            'Your Item has been removed.',
+                            'success'
+                        )
+                        setTimeout(() => {
+                            location.reload()
+                        }, 1500)
+
+                    } else {
+                        document.getElementById(prodId).innerHTML = quantity + count
+                        $('#total').html('$ ' + response.total)
+
+                    }
+                }
+            })
+        }
+
+    </script>
+    <script>
+        function deleteCart(cartId, prodId) {
+
+
+            $.ajax({
+                url: '/deleteCart',
+                data: {
+                    cart: cartId,
+                    product: prodId,
+                },
+                method: 'post',
+                success: (response) => {
+                    if (response) {
+                        Swal.fire({
+                            title: 'Are you sure want to Remove?',
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Yes, delete it!'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                Swal.fire(
+                                    'Deleted!',
+                                    'Item  has been Removed.',
+                                    'success'
+                                )
+                                setTimeout(() => {
+                                    location.reload()
+
+                                }, 1500)
+                            }
+                        })
+
+                    }
+                }
+            })
+        }
+
+    </script>
+
+</body>

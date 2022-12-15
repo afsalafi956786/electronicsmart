@@ -1,0 +1,81 @@
+{{> layouts}}
+
+<body>
+    {{> userHeader}}
+
+
+    <div class="container rounded bg-white mt-5">
+        <div class="row">
+            <h3>Account details</h3>
+            <div class="col-md-8">
+                <div class="p-3 py-5">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div class="d-flex flex-row align-items-center back"><i
+                                class="fa fa-long-arrow-left mr-1 mb-1"></i>
+
+                        </div>
+                        <h6 class="text-right">Edit Profile</h6>
+                    </div>
+                    <form action="/change-details" method="POST">
+
+                        <div class="row mt-3">
+                            <label for="">Name</label>
+
+                            <div class="col-md-12"><input style="color: rgb(100, 100, 100);" type="text"
+                                    class="form-control" name="name" placeholder="name" value="{{user.name}}" required>
+                            </div>
+                        </div>
+
+                        <div class="row mt-3">
+                            <label for="">Email</label>
+                            <div class="col-md-12"><input style="color: rgb(100, 100, 100);" type="email"
+                                    class="form-control" name="email" value="{{user.email}}" placeholder="email"
+                                    required></div>
+                        </div>
+                        <div class="row mt-3">
+                            <label for="">Current password</label>
+                            <p style="color: red;">{{currentPass}}</p>
+
+                            <div class="col-md-12"><input type="password" class="form-control" name="currPass"
+                                    placeholder="current  password" value="" required></div>
+                        </div>
+                        <div class="row mt-3">
+                            <label for="">New password</label>
+                            <div class="col-md-12"><input type="password" class="form-control" name="newPass" value=""
+                                    placeholder="new password" required></div>
+                        </div>
+                        <div class="row mt-3">
+                            <label for="">confirm password</label>
+                            <p style="color: red;">{{confirmErr}}</p>
+
+                            <div class="col-md-12"><input type="password" class="form-control" name="confirmPass"
+                                    placeholder="confirm  password" value="" required></div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="mt-5 text-right"><button class="btn btn-primary profile-button"
+                                    type="submit">Save Profile</button></div>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{> userFooter}}
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    {{#if msg}}
+    <script>
+        Swal.fire({
+            position: 'center',
+            icon: 'success',
+            title: 'Account details is updated',
+            showConfirmButton: false,
+            timer: 1500
+        })
+
+    </script>
+    {{/if}}
+
+
+</body>

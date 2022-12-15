@@ -1,0 +1,146 @@
+
+{{> adminLayout}}
+{{> adminHeader}}
+
+
+
+<div class=" row m-t-30 p-5">
+
+    <h3 class="title-5 m-b-35 mt-5 font-weight-bold">Banner</h3>
+    
+    <div class="col-md-12">
+        <a href="/admin/add-banner" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        <button class="au-btn au-btn-icon au-btn--green au-btn--small mr-1 float-right">
+            <i class="zmdi zmdi-plus"></i>add Banner</button></a>
+        <!-- DATA TABLE-->
+
+        <div class="table-responsive m-b-40 mt-5">
+            <table id="example" class="table table-borderless table-data3 table table-striped table-bordered">
+                <thead>
+                    
+                    <tr>
+                        
+                        <th style="color: white;">Offer title</th>
+                        <th style="color: white;">Image</th>
+                        <th style="color: white;">Product name</th>
+                        <th style="color: white;">Link</th>
+                        <th style="color: white;">price</th>
+                        <th style="color: white;">delete</th>
+                         
+                       
+        
+
+                    </tr>
+                </thead>
+                <tbody>
+                   {{#each banner}}
+                    <tr>
+                       
+                        <td class="desc">{{this.title}}</td>
+                        <td><img style="width: 80px;height:auto;" src="/admin/productImage/{{this.imgBanner.[0].filename}}"> </td>
+                        <td>{{this.prodcutname}}</td>
+                        <td style="color: green;">{{this.url}}</td>
+                        <td>{{this.price}}</td>
+                          <td>
+                            <div class="btn-group dropleft">
+                                <button type="button" class="btn btn-white dropdown-toggle bg-white"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                </button>
+                                <div class="dropdown-menu">
+                                    <a style="color: red;" onclick="deletebanner('{{this._id}}')" class="dropdown-item">Delete
+                                    </a>
+                                   
+                                    <a class="dropdown-item">Cancel</a>
+                                </div>
+                            </div>
+                        </td>
+
+                      
+                    </tr>
+                    {{/each}}
+                   
+
+                </tbody>
+            </table>
+        </div>
+        <!-- END DATA TABLE-->
+    
+</div>
+<div class="row">
+    <div class="col-md-12">
+      
+    </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+{{> adminScript}}
+
+
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap4.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#example').DataTable();
+    });
+
+</script>
+
+
+</script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+{{#if bannerMsg}}
+<script>
+    Swal.fire({
+        position: 'center',
+        icon: 'success',
+        title: 'Banner added',
+        showConfirmButton: false,
+        timer: 1500
+    })
+</script>
+{{/if}}
+<script>
+    function deletebanner(deleteId) {
+        $.ajax({
+           
+            url: '/admin/banner-delete',
+            data: {
+                bannerId:deleteId,
+                
+            },
+             method: 'post',
+            success: (response) => {
+                if (response) {
+                    Swal.fire({
+                        title: 'Are you sure want to Remove?',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes, delete it!'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            Swal.fire(
+                                'Deleted!',
+                                'Item  has been Removed.',
+                                'success'
+                            )
+                            setTimeout(() => {
+                                location.reload()
+
+                            }, 1500)
+                        }
+                    })
+
+                }
+            }
+        })
+    }
+
+</script>

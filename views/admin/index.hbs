@@ -1,0 +1,259 @@
+<!-- MAIN CONTENT-->
+
+{{> adminLayout}}
+{{!--
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.4.1/css/buttons.dataTables.min.css">
+<link rel="stylesheet" href="//cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css"> --}}
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.3.2/css/buttons.dataTables.min.css">
+
+<body>
+    {{> adminHeader}}
+    <div class="main-content">
+        <div class="section__content section__content--p30">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="overview-wrap">
+                            <h2 class="title-1">Admin Panel</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="row m-t-25">
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="overview-item overview-item--c1">
+                            <div class="overview__inner">
+                                <div class="overview-box clearfix">
+                                    <div class="icon">
+                                        <i class="zmdi zmdi-account-o"></i>
+                                    </div>
+                                    <div class="text">
+                                        <h2>{{users}}</h2>
+                                        <span>Total users</span>
+                                    </div>
+                                </div>
+                                <div class="overview-chart">
+                                    <canvas id="widgetChart1"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="overview-item overview-item--c2">
+                            <div class="overview__inner">
+                                <div class="overview-box clearfix">
+                                    <div class="icon">
+                                        <i class="zmdi zmdi-shopping-cart"></i>
+                                    </div>
+                                    <div class="text">
+                                        <h2>{{category}}</h2>
+                                        <span>Total category</span>
+                                    </div>
+                                </div>
+                                <div class="overview-chart">
+                                    <canvas id="widgetChart2"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="overview-item overview-item--c3">
+                            <div class="overview__inner">
+                                <div class="overview-box clearfix">
+                                    <div class="icon">
+                                        <i class="zmdi zmdi-dropbox"></i>
+                                    </div>
+                                    <div class="text">
+                                        <h2>{{products}}</h2>
+                                        <span>Total products</span>
+                                    </div>
+                                </div>
+                                <div class="overview-chart">
+                                    <canvas id="widgetChart3"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="overview-item overview-item--c4">
+                            <div class="overview__inner">
+                                <div class="overview-box clearfix">
+                                    <div class="icon">
+                                        <i class="zmdi zmdi-money"></i>
+                                    </div>
+                                    <div class="text">
+                                        <h2>₹ {{totalsale}}</h2>
+                                        <span>total earnings</span>
+                                    </div>
+                                </div>
+                                <span id="monthlySells" data-month="{{ salesbymonth}}"></span>
+                                <div class="overview-chart">
+                                    <canvas id="widgetChart4"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="au-card recent-report">
+                            <div class="au-card-inner">
+                                <h3 class="title-2">Income status</h3>
+                                <div class="chart-info">
+                                    <div class="chart-info__left">
+                                        <div class="chart-note">
+                                            {{!-- <span class="dot dot--blue"></span> --}}
+                                            {{!-- <span>products</span> --}}
+                                        </div>
+                                        <div class="chart-note mr-0">
+                                            <span class="dot dot--green"></span>
+                                            <span>Income</span>
+                                        </div>
+                                    </div>
+                                    <div class="chart-info__right">
+                                        <div class="chart-statis">
+                                            <span class="index incre">
+                                                <i class="zmdi zmdi-long-arrow-up"></i>25%</span>
+                                            <span class="label">sales</span>
+                                        </div>
+                                        <div class="chart-statis mr-0">
+                                            {{!-- <span class="index decre">
+                                                <i class="zmdi zmdi-long-arrow-down"></i>10%</span>
+                                            <span class="label">services</span> --}}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="recent-report__chart">
+                                    <canvas id="recent-rep-chart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6">
+                     <h2 class="title-2">Recent orders</h2>
+                        <div class="table-responsive table--no-card m-b-40">
+                            <table class="table table-borderless table-striped table-earning mt-2">
+                                <thead>
+                                    <tr>
+                                        <th>date</th>
+                                        <th>order ID</th>
+                                        <th>name</th>
+                                        <th class="text-right">Payment</th>
+                                        <th class="text-right">total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {{#each orders}}
+                                    <tr>
+                                        <td>{{this.date}}</td>
+                                        <td>{{this._id}}</td>
+                                        <td>{{this.user.name}}</td>
+                                        <td class="text-right">{{this.payment}}</td>
+                                        <td class="text-right">{{this.total}}</td>
+                                    </tr>
+                                    {{/each}}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+
+                  <h2 class="title-2">Sales report</h2>
+                <select style="background-color:rgb(217, 217, 217) ;" class="float-right" id="report" name="" >
+                    <option value="1">Today sales</option>
+                    <option value="2">Weekly sales</option>
+                    <option value="3">Monthly sales</option>
+                    <option value="4">Yearly sales</option>
+                </select>
+                <table id="example" class="display nowrap" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Status</th>
+                            <th>Payment</th>
+                            <th>Customer</th>
+                            <th>Date</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each sales}}
+                        <tr>
+                            <td>{{this._id}}</td>
+                            <td>{{this.status}}</td>
+                            <td>{{this.payment}}</td>
+                            <td>{{this.user.name}}</td>
+                            <td>{{this.date}}</td>
+                            <td>{{this.total}}</td>
+                            
+                        </tr>
+                    </tbody>
+                    {{/each}}
+                </table> 
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="copyright">
+                            <p>Copyright © 2018 . All rights reserved <a href="https://colorlib.com">Electronics
+                                    Mart</a>.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{> adminScript}}
+
+<script>
+$(document).ready(function(){
+    $("#report").change(function(){
+        console.log($('#report option:selected').val())
+        $.ajax({
+            type:'POST',
+            url:'/admin/sales-report',
+            data:{
+                keyValue:$('#report option:selected').val()
+            },
+            success:(response)=>{
+                if(response.status){
+                    console.log(response.sales)
+                   var table=$('#example').DataTable();
+                   table.rows().remove().draw()
+                   response.sales.forEach(element=>{
+                    table.row.add([element._id.toString().substring(8,14),element.status,element.payment,element.user.name,moment(element.createdAt).format('D-MMMM-YYYY'),element.total]).draw(false)
+                   })
+                   console.log(table)
+                }
+
+            }
+        })
+    })
+})
+
+</script>
+    <script>
+        $(document).ready(function () {
+            $('#example').DataTable({
+                dom: 'Bfrtip',
+                buttons: [
+                    'copy', 'csv', 'excel', 'pdf', 'print'
+                ]
+            });
+        });
+    </script>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+</body>
+
+
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.3.2/js/dataTables.buttons.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.3.2/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.3.2/js/buttons.print.min.js"></script>
+<!-- END MAIN CONTENT-->

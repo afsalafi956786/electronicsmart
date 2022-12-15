@@ -1,0 +1,73 @@
+{{> adminLayout}}
+{{> adminHeader}}
+
+<div class=" row m-t-30 p-5">
+    <div class="col-md-12">
+        <!-- DATA TABLE-->
+        <h3 class="title-5 m-b-35 mt-5 font-weight-bold">Users</h3>
+        <div class="table-responsive m-b-40 mt-5">
+            <table id="example" class="table table-borderless table-data3 table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th>Count</th>
+                        <th>name</th>
+                        <th>email</th>
+                        <th>Phone</th>
+                         <th>status</th>
+                        <th>Block/Unblock</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each getUsers}}
+                    <tr>
+                        <td>{{@index}}</td>
+                        <td>{{this.name}}</td>
+                        <td>{{this.email}}</td>
+                        <td>{{this.phone}}</td>
+                         <td>{{#if this.isBanned}}<p style="color: red;" >Bannned</p>
+                         {{else}}<p style="color: green;" >Active</p>{{/if}}</td>
+                        <td>{{#if this.isBanned}}
+                            <a style="color:green ;" href="/admin/user/active?activeId={{this._id}}"
+                                onclick="return confirm('Are you sure want ot Active  {{this.name}} ?')">Active</a>
+                                {{else}}
+                                 <a style="color:red ;" href="/admin/user/block?userId={{this._id}}"
+                                onclick="return confirm('Are you sure want ot Block {{this.name}} ?')">Block</a>
+                                {{/if}}
+                        </td>
+                    </tr>
+                    {{/each}}
+
+
+
+                </tbody>
+            </table>
+        </div>
+        <!-- END DATA TABLE-->
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="copyright">
+            <p>Copyright © 2018 Colorlib. All rights reserved. Template by <a href="https://colorlib.com">Colorlib</a>.
+            </p>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+{{> adminScript}}
+
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap4.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+    $('#example').DataTable();
+});
+
+</script>

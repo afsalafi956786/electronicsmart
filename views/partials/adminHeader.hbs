@@ -1,0 +1,156 @@
+{{!-- <body class="animsition"> --}}
+    <div class="page-wrapper">
+        <!-- HEADER MOBILE-->
+        <header class="header-mobile d-block d-lg-none">
+            <div class="header-mobile__bar">
+                <div class="container-fluid">
+                    <div class="header-mobile-inner">
+                        <a class="logo" href="/">
+                            <img src="/admin/images/electronicsAdmin.png" alt="" />
+                        </a>
+                        <button class="hamburger hamburger--slider" type="button">
+                            <span class="hamburger-box">
+                                <span class="hamburger-inner"></span>
+                            </span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <nav class="navbar-mobile">
+                <div class="container-fluid">
+                    <ul class="navbar-mobile__list list-unstyled">
+                        <li class="has-sub">
+                            <a class="js-arrow" href="/admin">
+                                <i class="fas fa-tachometer-alt"></i>Dashboard</a>
+                            <ul class="navbar-mobile-sub__list list-unstyled js-sub-list">
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="/admin/user">
+                                <i class="fas fa-chart-bar"></i>Users</a>
+                        </li>
+                        <li>
+                            <a href="/admin/product">
+                                <i class="fas fa-table"></i>Products</a>
+                        </li>
+                        <li>
+                            <a href="/admin/category">
+                                <i class="fas fa-table"></i>Category</a>
+                        </li>
+                        <li>
+                            <a href="/admin/order-manage">
+                                <i class="far fa-check-square"></i>orders</a>
+                        </li>
+                           <li>
+                            <a href="/admin/coupon-view">
+                                <i class="fas fa-table"></i>Coupons</a>
+                        </li>
+                          <li>
+                            <a href="/admin/banner">
+                                <i class="fas fa-table"></i>Banner</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+        <!-- END HEADER MOBILE-->
+
+        <!-- MENU SIDEBAR-->
+        <aside class="menu-sidebar d-none d-lg-block">
+            <div class="logo">
+                <a href="#">
+                    <img src="/admin/images/electronicsAdmin.png" alt="" />
+                </a>
+            </div>
+            <div class="menu-sidebar__content js-scrollbar1">
+                <nav class="navbar-sidebar">
+                    <ul class="list-unstyled navbar__list">
+                        <li class=" has-sub">
+                            <a  href="/admin">
+                                <i class="fas fa-tachometer-alt"></i>Dashboard</a>
+                            <li class="list-unstyled navbar__sub-list js-sub-list">
+                            </li>
+                        </li>
+                        <li>
+                            <a href="/admin/user">
+                                <i class="fas fa-chart-bar"></i>Users</a>
+                        </li>
+                        <li>
+                            <a href="/admin/product">
+                                <i class="fas fa-table"></i>Products</a>
+                        </li>
+                        <li>
+                            <a href="/admin/category">
+                                <i class="far fa-check-square"></i>Category</a>
+                        </li>
+                        <li>
+                            <a href="/admin/order-manage">
+                                <i class="fas fa-map-marker-alt"></i>Orders</a>
+                        </li>
+                           <li>
+                            <a href="/admin/coupon-view">
+                                <i class="fas fa-table"></i>Coupons</a>
+                        </li>
+                          <li>
+                            <a href="/admin/banner">
+                                <i class="fas fa-table"></i>Banner</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </aside>
+        <!-- END MENU SIDEBAR-->
+
+        <!-- PAGE CONTAINER-->
+        <div class="page-container">
+            <!-- HEADER DESKTOP-->
+            <header class="header-desktop">
+                <div class="section__content section__content--p30">
+                    <div class="container-fluid">
+                        <div class="header-wrap">
+                        
+                           
+                            <div class="header-button">
+                                <div class="account-wrap">
+                                    <div class="account-item clearfix js-item-menu">
+                                        <div class="content">
+                                              <img style="width: 30px;height: auto;" src="/admin/productImage/admin-user-icon-11.jpg" alt="John Doe" />
+                                            <a class="js-acc-btn" href="#">Admin Panel</a>
+                                        </div>
+                                       
+                                        <div class="account-dropdown js-dropdown">
+                                            <div class="info clearfix">
+                                                <div class="content">
+                                                    {{#if admin}}
+                                                    <h5 class="name">
+                                                  
+                                                        <a href="#">{{admin.email}}</a>
+                                                    </h5>
+                                                    <span class="email"></span>
+                                                    {{else}}
+                                                     <h5 class="name">
+                                                        <a href="#">{{admin.email}}</a>
+                                                    </h5>
+                                                    {{/if}}
+
+                                                </div>
+                                            </div>
+                                           <div class="image">
+                                                    <a href="#">
+                                                        
+                                                    </a>
+                                                </div>
+                                            <div class="account-dropdown__footer">
+                                                <a href="/admin/logout">
+                                                    <i class="zmdi zmdi-power"></i>Logout</a>
+                                            </div>
+                                        
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            <!-- END HEADER DESKTOP-->

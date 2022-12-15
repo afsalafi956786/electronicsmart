@@ -1,0 +1,107 @@
+{{> layouts}}
+
+
+<body>
+    {{> userHeader}}
+
+    <div class="container">
+        <div class="container-fluid py-5 h-100">
+            <div class="row d-flex justify-content-center align-items-center h-100">
+                <div class="col-lg-10 ">
+                    <div class="" style="border-radius: 10px;">
+                        <div class="card-header px-4 py-5">
+                            <h5 style="color: rgb(194, 132, 0);" class="text-muted mb-0">Thanks for your Order<span
+                                    style="color: rgb(250, 175, 0);"> {{user.name}}</span></h5>
+                        </div>
+                        <div class="card-body p-4">
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <p class="lead fw-normal mb-0" style="color: #a8729a;">Receipt</p>
+                                <p class="small text-muted mb-0">Receipt Voucher : 1KAU9-84UIL</p>
+                            </div>
+                            {{#each order.products}}
+                            <div class="card shadow-0 border mb-4">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <img src="/admin/productImage/{{this.item.product_image.[0].filename}}"
+                                                class="img-fluid" alt="Phone">
+                                        </div>
+                                        <div
+                                            class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                                            <p class="text-muted mb-0">{{this.item.name}}</p>
+                                        </div>
+                                        <div
+                                            class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                                            <p class="text-muted mb-0 small"></p>
+                                        </div>
+                                        <div
+                                            class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                                            <p class="text-muted mb-0 small">{{this.item.brand}}</p>
+                                        </div>
+                                        <div
+                                            class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                                            <p class="text-muted mb-0 small">{{this.quantity}}</p>
+                                        </div>
+                                        <div
+                                            class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                                            <p class="text-muted mb-0 small"></p>₹ {{../order.total}}
+                                        </div>
+                                    </div>
+                                    <hr class="mb-4" style="background-color: #e0e0e0; opacity: 1;">
+                                    <div class="row d-flex align-items-center">
+                                        <div class="col-md-2">
+                                            <a class=" btn btn-success mb-0 small"  href="/order-details?id={{this._id}}">
+                                                <i class="icon-shopping-cart icon-large"></i> Go to orders</a> </div>
+                                            <div class="col-md-10">
+
+                                                <div class="d-flex justify-content-around mb-1">
+                                                    <p class="text-muted mt-1 mb-0 small ms-xl-5">Success</p>
+                                                    <p class="text-muted mt-1 mb-0 small ms-xl-5"></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {{/each}}
+
+
+                                <div class="d-flex justify-content-between pt-2">
+                                    <p class="fw-bold mb-0">Order Details</p>
+                                    <p class="text-muted mb-0"><span class="fw-bold me-4">Total </span>₹ {{order.total}}
+                                    </p>
+                                </div>
+
+                                <div class="d-flex justify-content-between pt-2">
+                                    <p class="text-muted mb-0">Invoice Number :</p>
+                                    <p class="text-muted mb-0"><span class="fw-bold me-4"></span> </p>
+                                </div>
+
+                                <div class="d-flex justify-content-between">
+                                    <p class="text-muted mb-0"> Date : {{order.date}}</p>
+
+                                </div>
+
+                                <div class="d-flex justify-content-between mb-5">
+                                    <p class="text-muted mb-0">Recepits Voucher : 18KU-62IIK</p>
+                                    <p class="text-muted mb-0"><span class="fw-bold me-4">Delivery Charges</span> Free
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="card-footer border-0 px-4 py-5"
+                                style="background-color: #d7d7d7; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px;">
+                                <h5
+                                    class="d-flex align-items-center justify-content-end text-white text-uppercase mb-0">
+                                    Total
+                                    paid: <span class="h2 mb-0 ms-2">₹ {{order.total}}</span></h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{> userFooter}}
+
+            
+        </script>
+</body>

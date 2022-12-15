@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OTP</title>
+    <link rel="stylesheet" href="/users/otp.css" />
+
+</head>
+
+<body>
+    <div class="container">
+        <h3 class="title">OTP Verification</h3>
+        <p class="sub-title">
+            Enter the OTP you received to
+            <span class="phone-number">+20 102 2233 444</span>
+        </p>
+        <form action="/otp" method="post">
+         <p style="color: red;">{{otpErr}}</p>
+        <div class="wrapper">
+            
+            <input type="text" name="otp1" class="field 1" maxlength="1">
+            <input type="text"  name="otp2" class="field 2" maxlength="1">
+            <input type="text"  name="otp3" class="field 3" maxlength="1">
+            <input type="text"  name="otp4" class="field 4" maxlength="1">
+        </div>
+        <button type="submit" class="btn btn-outline-success ">Submit</button>
+        <button type="button" class="resend">
+            Resend OTP
+            <i class="fa fa-caret-right"></i>
+        </button>
+    </div>
+</form>
+
+    <script>
+        const inputFields = document.querySelectorAll("input.field");
+
+        inputFields.forEach((field) => {
+            field.addEventListener("input", handleInput);
+        });
+
+        function handleInput(e) {
+            let inputField = e.target;
+            if (inputField.value.length >= 1) {
+                let nextField = inputField.nextElementSibling;
+                return nextField && nextField.focus();
+            }
+        }
+
+    </script>
+</body>
+
+</html>

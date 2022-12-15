@@ -1,0 +1,126 @@
+{{> adminLayout}}
+
+<body>
+    {{> adminHeader}}
+
+    <div class=" row m-t-30 p-5">
+        <div class="col-md-12">
+            <!-- DATA TABLE-->
+            <h3 class="title-5 m-b-35 mt-5 font-weight-bold">Orders List</h3>
+            <div class="table-responsive m-b-40 mt-5">
+                <table id="example" class="table table-borderless table-data3 table table-striped table-bordered">
+                    <thead>
+
+                        <tr>
+                            <th>Order Id</th>
+                            <th>Date</th>
+                            <th>Customer</th>
+                            <th>Status</th>
+                            <th>Payment</th>
+                            <th>Total</th>
+                            <th>update </th>
+                       
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each order}}
+
+
+                        <tr>
+                            <td>{{this._id}}</td>
+                            <td>{{this.date}}</td>
+                            <td>{{this.user.name}}</td>
+                            <td >{{this.status}}</td>
+                            <td>{{this.payment}}</td>
+                            <td>{{this.total}}</td>
+
+                            <td>
+                                <div class="btn-group dropleft">
+                                    <button type="button" class="btn btn-white dropdown-toggle bg-white"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <a onclick="changeStatus('{{this._id}}','Processed')"
+                                            class="dropdown-item">order Processed</a>
+                                         <a onclick="changeStatus('{{this._id}}','Shipped')"
+                                            class="dropdown-item">order Shipped</a>
+                                        <a onclick="changeStatus('{{this._id}}','Delivered')"
+                                            class="dropdown-item">Order delivered</a>
+                                        <a class="dropdown-item">Cancel</a>
+                                    </div>
+                                </div>
+                            
+
+
+                        </tr>
+                        {{/each}}
+
+
+
+                    </tbody>
+                </table>
+            </div>
+            <!-- END DATA TABLE-->
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+
+        </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    {{> adminScript}}
+
+
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap4.min.js"></script>
+
+
+    <script>
+        $(document).ready(function () {
+            $('#example').DataTable();
+        });
+    </script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+
+        function changeStatus(orderId, status) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "change order to" + status,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, change it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '/admin/change-status',
+                        method: 'post',
+                        data: {
+                            orderId,
+                            status
+                        },
+                        success: ((response) => {
+                            Swal.fire(
+                                'Changed!',
+                                'Order has been changed to' + status,
+                                'success'
+                            )
+                            window.location.href = '/admin/order-manage'
+                        })
+                    })
+
+                }
+            })
+        }
+
+    </script>
+</body>

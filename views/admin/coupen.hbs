@@ -1,0 +1,128 @@
+{{> adminLayout}}
+{{> adminHeader}}
+
+<div class=" row m-t-30 p-5">
+    <div class="col-md-12">
+
+        <!-- DATA TABLE-->
+        <h3 class="title-5 m-b-35 mt-5 font-weight-bold">Coupons</h3>
+        <div class="table-responsive m-b-40 mt-5">
+            <a href="/admin/add-coupon" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                <button class="au-btn au-btn-icon au-btn--green au-btn--small mr-1 float-right">
+                    <i class="zmdi zmdi-plus"></i>New Coupon</button></a>
+            <table id="example" class="table table-borderless table-data3 table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th>code</th>
+                        <th>Type</th>
+                        <th>Discount</th>
+                        <th>limit</th>
+                        <th>status</th>
+                        <th>Start date</th>
+                        <th>End date</th>
+                        <th>update</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each coupons}}
+                    <tr>
+                        <td>{{this.code}}</td>
+                        <td>{{this.type}}</td>
+                        <td>{{this.discount}}</td>
+                        <td>{{this.limit}}</td>
+                        <td>{{this.status}}</td>
+                        <td>{{this.start}}</td>
+                        <td>{{this.end}}</td>
+                        <td>
+                            <div class="btn-group dropleft">
+                                <button type="button" class="btn btn-white dropdown-toggle bg-white"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                </button>
+                                <div class="dropdown-menu">
+                                    <a href="/admin/edit-coupon/{{this._id}}" class="dropdown-item">Edit
+                                    </a>
+                                    <a onclick="deleteCoupon('{{this._id}}')" class="dropdown-item">Delete
+                                    </a>
+                                    <a class="dropdown-item">{{this.status}}</a>
+                                    <a class="dropdown-item">Cancel</a>
+                                </div>
+                            </div>
+                        </td>
+
+                    </tr>
+                    {{/each}}
+
+
+
+                </tbody>
+            </table>
+        </div>
+        <!-- END DATA TABLE-->
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="copyright">
+
+            </p>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+{{> adminScript}}
+
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap4.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#example').DataTable();
+    });
+
+</script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    function deleteCoupon(couponId) {
+        $.ajax({
+           
+            url: '/admin/delete-coupon',
+            data: {
+                coupon:couponId,
+                
+            },
+             method: 'post',
+            success: (response) => {
+                if (response) {
+                    Swal.fire({
+                        title: 'Are you sure want to Remove?',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes, delete it!'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            Swal.fire(
+                                'Deleted!',
+                                'Item  has been Removed.',
+                                'success'
+                            )
+                            setTimeout(() => {
+                                location.reload()
+
+                            }, 1500)
+                        }
+                    })
+
+                }
+            }
+        })
+    }
+
+</script>

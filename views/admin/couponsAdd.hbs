@@ -1,0 +1,154 @@
+    `{{> adminLayout}}
+{{> adminHeader}}
+<!-- END HEADER DESKTOP-->
+<div class="main-content ml-5">
+    <div class="section__content section__content--p30">
+        <div class="container-fluid">
+
+            <div class="mt-5 col-lg-9 ">
+                <div class="card align">
+                    <div style="background-color: rgb(48, 46, 46);" class="card-header">
+                        <strong style="color: white;">Add Coupon</strong>
+                    </div>
+                    <div class="card-body card-block">
+                        <form action="/admin/add-coupon" method="POST" 
+                            class="form-horizontal">
+                            <div class="row form-group">
+                                <div class="col col-md-3">
+                                    <label for="text-input" placeholder="Enter coupon code" class=" form-control-label"
+                                        required>Coupon Code</label>
+                                </div>
+                                <div class="col-12 col-md-9">
+                                    <input type="text" id="text-input" name="code" placeholder="Enter the coupon code"
+                                        class="form-control" required>
+
+                                </div>
+                            </div>
+                            <div style="background-color: rgb(241, 245, 242);" class="card-header">
+                                <strong style="color: white;"></strong>
+
+                                <div class="row form-group">
+                                    <div class="col col-md-3">
+                                        <label class=" form-control-label mt-3">Type</label>
+                                    </div>
+                                    <div class="col col-md-9">
+                                        <div class="form-check">
+                                            <div class="radio">
+                                                <label for="radio1" class="form-check-label ">
+                                                    <input type="radio" id="radio1" name="type" value="percentage"
+                                                        class="form-check-input">Percentage
+                                                </label>
+                                            </div>
+                                            <div class="radio">
+                                                <label for="radio2" class="form-check-label ">
+                                                    <input type="radio" id="radio2" name="type" value="amount"
+                                                        class="form-check-input">Fixed amount
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row form-group mt-5">
+                                <div class="col col-md-3">
+                                    <label for="text-input" placeholder="Name" class=" form-control-label"
+                                        required>Discount value</label>
+                                </div>
+                                <div class="col-12 col-md-9">
+                                    <input type="number" id="text-input" name="discount" placeholder="Enter discount value"
+                                        class="form-control" required>
+
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col col-md-3">
+                                    <label for="text-input" placeholder="Name" class=" form-control-label"
+                                        required>Usage limit</label>
+                                </div>
+                                <div class="col-12 col-md-9">
+                                    <input type="text" id="text-input" name="limit" placeholder="Enter usage limit "
+                                        class="form-control" required>
+
+                                </div>
+                            </div>
+                            <div style="background-color: rgb(241, 245, 242);" class="card-header ">
+                                <strong style="color: white;"></strong>
+
+
+                                <div class="row form-group">
+                                    <div class="col col-md-3">
+                                        <label class=" form-control-label mt-3">Status</label>
+                                    </div>
+                                    <div class="col col-md-9">
+                                        <div class="form-check">
+                                            <div class="radio">
+                                                <label for="radio1" class="form-check-label ">
+                                                    <input type="radio" id="radio3" name="status" value="enabled"
+                                                        class="form-check-input">Enable
+                                                </label>
+                                            </div>
+                                            <div class="radio">
+                                                <label for="radio2" class="form-check-label ">
+                                                    <input type="radio" id="radio4" name="status" value="disabled"
+                                                        class="form-check-input">Disable
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+
+
+                            </div>
+
+                            <div style="background-color: rgb(241, 245, 242);" class="card-header mt-5">
+                                <strong style="color: rgb(105, 102, 102);">Schedule</strong>
+                                <p style="color: rgb(175, 175, 175);">Us these settings to limit the coupon expiration
+                                    date</p>
+
+
+                                <div class="row form-group mt-3">
+                                    <div class="col col-md-3">
+                                        <label for="text-input" placeholder="Name" class=" form-control-label"
+                                            required>Start date</label>
+                                    </div>
+                                    <div class="col-12 col-md-9">
+                                        <input type="date" id="text-input" name="startDate" placeholder="start date "
+                                            class="form-control" required>
+
+                                    </div>
+                                </div>
+
+                                <div class="row form-group">
+                                    <div class="col col-md-3">
+                                        <label for="text-input" placeholder="" class=" form-control-label" required>End
+                                            date</label>
+                                    </div>
+                                    <div class="col-12 col-md-9">
+                                        <input type="date" id="text-inputs" name="endDate" placeholder="End date "
+                                            class="form-control" required>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                    </div>
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-primary btn-sm">
+                            <i class="fa fa-dot-circle-o"></i> Add coupon
+                        </button>
+                        <a href="/admin/coupon-view">
+                            <button type="button" class="btn btn-danger btn-sm ml-3">Cancel</button>
+                        </a>
+                    </div>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{{> adminScript }}

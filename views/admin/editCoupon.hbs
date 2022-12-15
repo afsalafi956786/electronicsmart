@@ -1,0 +1,179 @@
+{{> adminLayout}}
+{{> adminHeader}}
+<!-- END HEADER DESKTOP-->
+<div class="main-content ml-5">
+    <div class="section__content section__content--p30">
+        <div class="container-fluid">
+
+            <div class="mt-5 col-lg-9 ">
+                <div class="card align">
+                    <div style="background-color: rgb(48, 46, 46);" class="card-header">
+                        <strong style="color: white;">Edit Coupon</strong>
+                    </div>
+                    <div class="card-body card-block">
+                        <form action="/admin/edit-coupon?id={{coupon._id}}" method="POST" class="form-horizontal">
+                            <div class="row form-group">
+                                <div class="col col-md-3">
+                                    <label for="text-input" class=" form-control-label" required>Coupon Code</label>
+                                </div>
+                                <div class="col-12 col-md-9">
+                                    <input type="text" id="text-input" value="{{coupon.code}}" name="code"
+                                        class="form-control" required>
+
+                                </div>
+                            </div>
+                            <div style="background-color: rgb(241, 245, 242);" class="card-header">
+                                <strong style="color: white;"></strong>
+
+                                <div class="row form-group">
+                                    <div class="col col-md-3">
+                                        <label class=" form-control-label mt-3">Type</label>
+                                    </div>
+                                    <div class="col col-md-9">
+                                        <div class="form-check">
+                                            <div class="radio">
+                                                <label for="radio1" class="form-check-label ">
+                                                    {{#if coupon.check}}
+                                                    <input type="radio" id="radio1" value="percentage" name="type"
+                                                        class="form-check-input" checked>
+                                                    {{else}}
+                                                    <input type="radio" id="radio1" value="percentage" name="type"
+                                                        class="form-check-input">
+                                                        {{/if}}
+                                                        Percentage
+
+                                                </label>
+                                            </div>
+                                            <div class="radio">
+                                                <label for="radio2" class="form-check-label ">
+                                                    {{#if coupon.check}}
+                                                    <input type="radio" id="radio2" value="amount" name="type"
+                                                        class="form-check-input">
+                                                    {{else}}
+                                                    <input type="radio" id="radio2" value="amount" name="type"
+                                                        class="form-check-input" checked>
+                                                        {{/if}}
+                                                        Fixed amount
+                                                   
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row form-group mt-5">
+                                <div class="col col-md-3">
+                                    <label for="text-input" class=" form-control-label" required>Discount value</label>
+                                </div>
+                                <div class="col-12 col-md-9">
+                                    <input type="number" id="text-input" value="{{coupon.discount}}" name="discount"
+                                        class="form-control" required>
+
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col col-md-3">
+                                    <label for="text-input" class=" form-control-label" required>Usage limit</label>
+                                </div>
+                                <div class="col-12 col-md-9">
+                                    <input type="text" id="text-input" value="{{coupon.limit}}" name="limit"
+                                        class="form-control" required>
+
+                                </div>
+                            </div>
+                            <div style="background-color: rgb(241, 245, 242);" class="card-header ">
+                                <strong style="color: white;"></strong>
+
+
+                                <div class="row form-group">
+                                    <div class="col col-md-3">
+                                        <label class=" form-control-label mt-3">Status</label>
+                                    </div>
+                                    <div class="col col-md-9">
+                                        <div class="form-check">
+                                            <div class="radio">
+                                                <label for="radio1" class="form-check-label ">
+
+
+                                                    {{#if coupon.statusCheck}}
+                                                    <input type="radio" id="radio3" value="enabled" name="status"
+                                                        class="form-check-input" checked>
+                                                    {{else}}
+                                                    <input type="radio" id="radio3" value="enabled" name="status"
+                                                        class="form-check-input">
+                                                    {{/if}}
+
+                                                    Enable
+                                                </label>
+                                            </div>
+                                            <div class="radio">
+                                                <label for="radio2" class="form-check-label ">
+                                                    {{#if coupon.statusCheck}}
+                                                    <input type="radio" id="radio4" value="disabled" name="status"
+                                                        class="form-check-input">
+                                                    {{else}}
+                                                    <input type="radio" id="radio4" value="disabled" name="status"
+                                                        class="form-check-input" checked>
+                                                    {{/if}}
+                                                    Disable
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+
+
+                            </div>
+
+                            <div style="background-color: rgb(241, 245, 242);" class="card-header mt-5">
+                                <strong style="color: rgb(105, 102, 102);">Schedule</strong>
+                                <p style="color: rgb(175, 175, 175);">Us these settings to limit the coupon expiration
+                                    date</p>
+
+
+                                <div class="row form-group mt-3">
+                                    <div class="col col-md-3">
+                                        <label for="text-input" class=" form-control-label" required>Start date</label>
+                                    </div>
+                                    <div class="col-12 col-md-9">
+                                        <input type="date" id="text-input" value="{{coupon.start}}" name="startDate"
+                                            class="form-control" required>
+
+                                    </div>
+                                </div>
+
+                                <div class="row form-group">
+                                    <div class="col col-md-3">
+                                        <label for="text-input" class=" form-control-label" required>End
+                                            date</label>
+                                    </div>
+                                    <div class="col-12 col-md-9">
+                                        <input type="date" id="text-inputs" value="{{coupon.end}}" name="endDate"
+                                            class="form-control" required>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                    </div>
+                    <div class="card-footer">
+                        <button type="submit"  class="btn btn-primary btn-sm">
+                            <i class="fa fa-dot-circle-o"></i> Edit coupon
+                        </button>
+                        <a href="/admin/coupon-view">
+                            <button type="button" class="btn btn-danger btn-sm ml-3">Cancel</button>
+                        </a>
+                    </div>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{{> adminScript }}
