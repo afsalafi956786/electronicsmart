@@ -1,5 +1,6 @@
 {{> layouts}}
 
+
 <!-- Featured Start -->
 
 <body>
@@ -85,12 +86,10 @@
                 <div class="col-lg-8 col-md-8">
                     <ul class="filter__controls">
                         <h4>Top Brands</h4>
-                        {{#each products}}
-                        <li data-filter=".brand">{{this.brand}}</li>
+                        {{#each brand}}
+                        
+                        <li data-filter=".brand">{{this}}</li>
                         {{/each}}
-
-
-
                     </ul>
                 </div>
             </div>
@@ -101,7 +100,11 @@
                     <div class="product__item ">
                         <div class="product__item__pic set-bg "
                             data-setbg="/admin/productImage/{{this.product_image.[0].filename}}">
-                            <div class="label new">New</div>
+                            <div class="">
+
+                               
+                                 
+                            </div>
                             <ul class="product__hover">
                                 <li><a href="/productDetails?id={{this._id}}" class=""><span
                                             class="arrow_expand"></span></a></li>
@@ -112,7 +115,7 @@
                             </ul>
                         </div>
                         <div class="product__item__text">
-                            <h6><a href="#">{{this.name}}</a></h6>
+                            <h6><a href="/productDetails?id={{this._id}}" >{{this.name}}</a></h6>
                             <div class="rating">
                                 <i class="fa fa-star"></i>
                                 <i class="fa fa-star"></i>
@@ -165,7 +168,7 @@
                 <div class="col-lg-4 col-md-4 col-sm-6">
                     <div class="trend__content">
                         <div class="section-title">
-                            <h4>Hot Sale</h4>
+                            <h4>Top categories</h4>
                         </div>
                         {{#each categories}}
                         <div class="trend__item">
@@ -341,7 +344,6 @@
                 url: '/cart/' + prodId,
                 method: 'get',
                 success: (response) => {
-                    console.log(response)
                     if (response.status) {
                         let count = $('#cartcount').html()
                         count = parseInt(count) + 1
@@ -355,7 +357,7 @@
                             timer: 1500
                         })
 
-                    } else {
+                    } else if(response.status==false) {
                         Swal.fire({
                             title: 'Please Login your account',
                             confirmButtonText:
@@ -406,7 +408,7 @@
                         Swal.fire({
                             position: 'center',
                             icon: 'success',
-                            title: 'Item deleted from wishlist',
+                            title: 'Item added to wishlist',
                             showConfirmButton: false,
                             timer: 1500
                         })

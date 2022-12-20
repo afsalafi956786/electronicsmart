@@ -273,8 +273,8 @@
                                         <span class="top__text">Product</span>
 
                                         {{#each product}}
-                                        <li style="color:#ca1515;;" class="top__text__right mt-2">{{this.item.name}}</li>
-                                        {{/each}}
+                                    <li style="color:#ca1515;;" class="top__text__right mt-2">{{this.item.name}}</li>
+                                    {{/each}}
 
                                 </ul>
                             </div>
@@ -430,7 +430,7 @@
                                             setTimeout(() => {
                                                 window.location.href = '/account'
                                             }, 1500)
-                                        } else  {
+                                        } else {
                                             if (response.status) {
                                                 setTimeout(() => {
                                                     window.location.href = '/order-success'
@@ -516,7 +516,7 @@
                     $('#couponCheck').click(function () {
                         const couponCheckId = $('#couponCheckId').val()
                         const totalValue = parseInt($('#total').html())
-                        
+
 
                         $.ajax({
                             url: '/admin/check-coupon',
@@ -538,7 +538,7 @@
                                     } else {
                                         $('#insertcoupon').removeClass('text-danger').addClass('text-success').html('coupon Applied')
                                         $('#total').html(totalValue - response.coupon.discount)
-                                        console.log(totalValue-response.coupon.discount)
+                                        console.log(totalValue - response.coupon.discount)
                                         $('#couponCheckId').attr('readonly', 'true');
                                         $('#couponCheck').addClass('d-none');
                                         $('#couponCancel').removeClass('d-none');
@@ -546,13 +546,13 @@
                                     }
 
 
-                                }else{
-                                      $('#insertcoupon').addClass('text-danger').html(response.couponErr)
+                                } else {
+                                    $('#insertcoupon').addClass('text-danger').html(response.couponErr)
                                 }
                             })
                         })
 
-                        $('#couponCancel').click(function(){
+                        $('#couponCancel').click(function () {
                             location.reload()
                         })
 
@@ -562,4 +562,4 @@
 
 
 </body>
-<script src="https://checkout.razorpay.com/v1/checkout.js"></script >
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>

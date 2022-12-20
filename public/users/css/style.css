@@ -128,7 +128,7 @@ ol {
 	left: 0;
 	bottom: -4px;
 	height: 2px;
-	width: 200px;
+	width: auto;
 	background: #ca1515;
 	content: "";
 }

@@ -7,7 +7,7 @@ const cartModel = require('../models/cart-schema')
 const wishlistModel = require('../models/whishlist')
 const addressModel = require('../models/address-schema')
 const orderModel = require('../models/order-shema')
-const otpCheck = require('../OTPverify/otp');
+const otpSend = require('../OTPverify/otp');
 const bannerModel = require('../models/banner-schema')
 const OTP = require('twilio');
 const moment = require('moment')
@@ -17,12 +17,15 @@ const { NetworkContext } = require('twilio/lib/rest/supersim/v1/network');
 const client = require('twilio')(process.env.accountSID, process.env.authToken);
 const Razorpay = require('razorpay')
 const crypto = require('crypto')
-const couponModel = require('../models/coupen-schema')
+const couponModel = require('../models/coupen-schema');
+const { BrandRegistrationContext } = require('twilio/lib/rest/messaging/v1/brandRegistration');
 let userSignin;
 let phoneNum
 let key_id = 'rzp_test_Qb7Rw3E5m4cY6D'
 let key_secret = 'uVtNyxp8HDTJbMLfaTXDkhqk'
 let msg;
+let addressMsg;
+let editMsg;
 
 
 
@@ -52,6 +55,7 @@ module.exports.user_home = async (req, res, next) => {
             }
 
         }
+        const brand = await productModel.find().sort({ brand: 1 }).distinct('brand')
         const banner = await bannerModel.find()
 
         const userId = req.session.userId
@@ -59,7 +63,7 @@ module.exports.user_home = async (req, res, next) => {
         const categories = await categoryModel.find().limit(5)
         const products = await productModel.find({ isdelete: false })
         const hotProducts = await productModel.find({ isdelete: false }).limit(5)
-        res.render('user/index', { user, categories, products, count, hotProducts, countwish, banner })
+        res.render('user/index', { user, categories, products, count, hotProducts, countwish, banner, brand })
     } catch (error) {
         next(error)
     }
@@ -112,7 +116,21 @@ module.exports.do_signin = async (req, res) => {
     }
 }
 
+//otp page
+module.exports.otp_page = (req, res, next) => {
+    try {
+        const user = req.session.user
+        if (user) {
+            next(error)
+        } else {
+            res.render('user/otp')
+        }
 
+    } catch (error) {
+        next(error)
+
+    }
+}
 //user signup
 module.exports.user_signup = (req, res) => {
     try {
@@ -129,43 +147,37 @@ module.exports.user_signup = (req, res) => {
 
 }
 //user signup
-module.exports.do_signup = async (req, res) => {
+module.exports.do_signup = async (req, res, next) => {
     try {
         const { name, email, password, confirmPass, phone } = req.body
         const emailCheck = req.body.email
         const existEmail = await usermodel.findOne({ email: emailCheck })
         if (existEmail) {
-            res.render('user/signup', { checkEmailErr: 'This email already existed' })
+            res.render('user/signup', { checkEmailErr: 'This email already exist' })
+        }
+        const phoneNumber = await usermodel.findOne({ phone: phone })
+        if (phoneNumber) {
+            res.render('user/signup', { numberErr: 'This phone number already exist' })
         } else {
             const userDetails = req.body
             if (userDetails.password === userDetails.confirmPass) {
                 req.session.userDetail = userDetails
                 phoneNum = userDetails.phone
                 const phone = parseInt(phoneNum)
-                otpCheck.otpCall(phone);
-                console.log(otpCheck.otpCall);
-                res.render('user/otp')
+                otpSend.otpCall(phone);
+                res.render('user/otp', { phoneNum })
             } else {
                 res.render('user/signup', { checkErr: 'password is not mathced' })
             }
 
-            // await usermodel.create(userDetails).then(async (data)=>{
-            // // req.session.user=true
-            // //specific user 
-            // // req.session.userId=data._id
-            // res.redirect('/')
-            // })
-
         }
     } catch (error) {
+        console.log(error)
         next(error)
     }
 }
 
 // otp authentication page 
-// module.exports.otp_page=(req,res)=>{
-//         res.render('user/otp')
-// }
 
 //otp authentication
 module.exports.otp_Verify = async (req, res, next) => {
@@ -174,14 +186,15 @@ module.exports.otp_Verify = async (req, res, next) => {
         const otpArr = [];
         otpArr.push(otp1, otp2, otp3, otp4)
         const otparr = otpArr.join("")
+        if (otparr == "") {
+            res.render('user/otp', { otpErr: 'Invalid otp !' })
+        }
         let users = req.session.userDetail
         const mobile = users.phone
-        console.log(mobile);
         let otps = parseInt(otparr)
         const phoneNo = parseInt(mobile)
-        let otpStatus = await otpCheck.otpVerify(phoneNo, otps)
-
-        if (otpStatus.valid) {
+        let otpStatus = await otpSend.otpVerify(phoneNo, otps)
+        if (otpStatus.valid || otpStatus != null) {
             users.password = await bcrypt.hash(users.password, 10)
             const user = await usermodel.create(users)
             req.session.user = true
@@ -192,36 +205,13 @@ module.exports.otp_Verify = async (req, res, next) => {
             res.render('user/otp', { otpErr: 'Invalid otp !' })
         }
 
-        //     client.verify.services(process.env.serviceSID).verificationChecks.create({ to:`+91${mobile}`, code: otparr }).then(async (data) => {
-        //             console.log(data);
-        //                 if (data.status=='approved') {
-        //                     console.log("vannu");
-        //                     users.password = await bcrypt.hash(users.password, 10)
-        //                     await usermodel.create(users).then((data) => {
-        //                         req.session.user = true
-        //                         req.session.userId = data._id
-        //                         res.redirect('/')
-        //                     })
-
-        //                 } else {
-        //                     res.render('user/otp', { otpErr: 'Invalid otp !' })
-        //                 }
-
-
-        //         }).catch((error)=>{
-        //             res.send(error)
-        //         })
-
-
-        // } catch (error) {
-        //     next(error)
-
     } catch (error) {
+        console.log(error)
         next(error)
+
     }
-
-
 }
+
 //user Logout 
 module.exports.user_logout = (req, res) => {
     req.session.user = false
@@ -254,11 +244,12 @@ module.exports.view_shop = async (req, res, next) => {
             }
 
         }
+        const brand = await productModel.find().sort({ brand: 1 }).distinct('brand')
         const categories = await categoryModel.find()
         const products = await productModel.find({ isdelete: false })
         const userId = req.session.userId
         const user = await usermodel.findById(userId)
-        res.render('user/shop', { categories, products, user, count, countwish })
+        res.render('user/shop', { categories, products, user, count, countwish,brand })
     } catch (error) {
         next(error)
     }
@@ -293,12 +284,12 @@ module.exports.do_filter = async (req, res, next) => {
         let user = await usermodel.findById(userId)
         const name = req.query.name;
         let products = await productModel.find({ isdelete: false }).populate()
-        let categories = await categoryModel.find()
+        const brand = await productModel.find().sort({ brand: 1 }).distinct('brand')
         products = products.filter((data) => {
             if (data.category == name) return data
         })
 
-        res.render('user/filter', { products, name, user, countwish })
+        res.render('user/filter', { products, name, user,count, countwish,brand})
     } catch (error) {
         next(error)
 
@@ -390,7 +381,7 @@ module.exports.view_cart = async (req, res, next) => {
 module.exports.add_cart = async (req, res, next) => {
     try {
         const user = req.session.user
-        if (user != null) {
+        if (user) {
 
             const prodId = req.params.id
             const userId = req.session.userId
@@ -605,7 +596,7 @@ module.exports.add_wishlist = async (req, res, next) => {
                 let productExist = wishlist.products.findIndex(product => product.item == prodId)
                 if (productExist != -1) {
                     let Exist = await wishlistModel.findOne({ user: userId }).populate('products.item')
-                    Exist.products.splice(productExist, 1)
+                    Exist.products.splice(productExist, 0)
                     await Exist.save().then((response) => {
                         res.json(false)
                     })
@@ -664,7 +655,37 @@ module.exports.delete_wishlist = async (req, res, next) => {
 
 }
 
+//user address page view
+module.exports.account_view = async (req, res) => {
+    countwish = 0;
+    let count = 0;
+    if (req.session.user) {
+        const userid = req.session.userId
+        const userCart = await cartModel.findOne({ user: userid })
+        if (userCart) {
+            count = userCart.products.length
+        } else {
+            count = 0;
+        }
+        //count end
+        const users = req.session.userId
+        let userWish = await wishlistModel.findOne({ user: users })
+        if (userWish) {
+            countwish = userWish.products.length
+        } else {
+            countwish = 0;
+        }
+        //count end
+    }
 
+    const userId = req.session.userId
+    const user = await usermodel.findById(userId)
+    let address = await addressModel.findOne({ user: userId })
+    res.render('user/profile', { user, addressMsg, editMsg, address, count, countwish })
+    addressMsg = false
+    editMsg = false
+
+}
 
 
 //add user address
@@ -686,6 +707,7 @@ module.exports.add_address = async (req, res, next) => {
             })
         } else {
             await addressModel.create(obj)
+            addressMsg = true
             res.redirect('/account')
         }
 
@@ -707,17 +729,17 @@ module.exports.edit_address = async (req, res, next) => {
             const userId = req.session.userId
             const { name, address, city, pincode, phone, state } = req.body
             let objaddress = { name, address, city, state, pincode, phone }
+            console.log(objaddress)
             const addresses = await addressModel.findOne({ user: userId })
             addresses.address[id] = objaddress
             await addresses.save()
+            editMsg = true
             res.redirect('/account')
         }
 
     } catch (error) {
         next(error)
     }
-
-
 
 }
 
@@ -1005,6 +1027,7 @@ module.exports.order_success = async (req, res, next) => {
         }
         const userId = req.session.userId
         const user = await usermodel.findById(userId)
+        let address = await addressModel.findOne({ user: userId })
         const order = await orderModel.findOne({ user: userId }).populate({
             path: 'products',
             populate: {
@@ -1015,7 +1038,7 @@ module.exports.order_success = async (req, res, next) => {
         let date = new Date();
         const createdAt = order.createdAt
         order.date = moment(createdAt).format("DD MMMM , YYYY");
-        res.render('user/orderSuccess', { order, user, count, countwish })
+        res.render('user/orderSuccess', { order, user, count, countwish,address })
     } catch (error) {
         next(error)
 
@@ -1089,8 +1112,6 @@ module.exports.order_details = async (req, res, next) => {
 
 
 }
-
-
 //order cancel
 module.exports.cancel_order = async (req, res, next) => {
     try {
@@ -1111,36 +1132,6 @@ module.exports.cancel_order = async (req, res, next) => {
     }
 
 }
-//user Account page view
-module.exports.account_view = async (req, res) => {
-    countwish = 0;
-    let count = 0;
-    if (req.session.user) {
-        const userid = req.session.userId
-        const userCart = await cartModel.findOne({ user: userid })
-        if (userCart) {
-            count = userCart.products.length
-        } else {
-            count = 0;
-        }
-        //count end
-        const users = req.session.userId
-        let userWish = await wishlistModel.findOne({ user: users })
-        if (userWish) {
-            countwish = userWish.products.length
-        } else {
-            countwish = 0;
-        }
-        //count end
-    }
-
-    const userId = req.session.userId
-    const user = await usermodel.findById(userId)
-    let address = await addressModel.findOne({ user: userId })
-    res.render('user/profile', { user, address, count, countwish })
-
-}
-
 module.exports.coupon_view = async (req, res, next) => {
     try {
         countwish = 0;
@@ -1191,7 +1182,6 @@ module.exports.coupon_view = async (req, res, next) => {
 //user account details
 module.exports.account_details = async (req, res, next) => {
     try {
-
         countwish = 0;
         let count = 0;
         if (req.session.user) {
@@ -1214,7 +1204,7 @@ module.exports.account_details = async (req, res, next) => {
         }
         const userId = req.session.userId
         const user = await usermodel.findById(userId)
-        res.render('user/accountDetails', { count, msg, countwish, user })
+        res.render('user/accountDetails', {msg, user,count,countwish })
         msg = false
     } catch (error) {
         next(error)
@@ -1225,16 +1215,33 @@ module.exports.account_details = async (req, res, next) => {
 
 module.exports.change_details = async (req, res, next) => {
     try {
+        countwish = 0;
+        let count = 0;
+        if (req.session.user) {
+            const userid = req.session.userId
+            const userCart = await cartModel.findOne({ user: userid })
+            if (userCart) {
+                count = userCart.products.length
+            } else {
+                count = 0;
+            }
+            //count end
+            const users = req.session.userId
+            let userWish = await wishlistModel.findOne({ user: users })
+            if (userWish) {
+                countwish = userWish.products.length
+            } else {
+                countwish = 0;
+            }
+            //count end
+        }
 
         const { name, email, currPass, newPass, confirmPass } = req.body
         const userId = req.session.userId
         const user = await usermodel.findById(userId)
-        const emails = await usermodel.findOne({ email: email })
-        if (emails) {
-            res.render('user/accountDetails', { Exist: 'Email is already taken' })
-        } else {
             if (newPass == confirmPass) {
                 let newPassword = await bcrypt.compare(currPass, user.password)
+                console.log(newPassword)
                 if (newPassword) {
                     newPassword = await bcrypt.hash(newPass, 10)
                     await usermodel.findByIdAndUpdate(userId, {
@@ -1245,7 +1252,7 @@ module.exports.change_details = async (req, res, next) => {
                         }
                     })
                     msg = true;
-                    res.redirect('/account-details')
+                    res.redirect('/account-details',user,count,countwish)
 
                 } else {
                     countwish = 0;
@@ -1270,7 +1277,8 @@ module.exports.change_details = async (req, res, next) => {
                     }
                     const userId = req.session.userId
                     const user = await usermodel.findById(userId)
-                    res.render('user/accountDetails', { currentPass: 'current password is not matched', count, countwish, user })
+                  
+                    res.render('user/accountDetails', { currentPass: 'current password is not matched',count,user,countwish })
                 }
 
             } else {
@@ -1296,10 +1304,10 @@ module.exports.change_details = async (req, res, next) => {
                 }
                 const userId = req.session.userId
                 const user = await usermodel.findById(userId)
-                res.render('user/accountDetails', { confirmErr: 'Confirm password is not matched', count, countwish, user })
+                res.render('user/accountDetails', { confirmErr: 'Confirm password is not matched',user,count,countwish})
 
             }
-        }
+        
 
     } catch (error) {
         console.log(error)
@@ -1309,8 +1317,63 @@ module.exports.change_details = async (req, res, next) => {
 
 
 }
+//live search
+module.exports.live_search = async (req, res, next) => {
+    try {
+        const { SE } = req.body
+        let products = await productModel.find({ name: { $regex: SE } })
 
+        res.json({ status: true, products })
+    } catch (error) {
+        console.log(error)
+        next(error)
 
+    }
+}
+//searching
+module.exports.search = async (req, res, next) => {
+    try {
+        //cart count
+        countwish = 0;
+        let count = 0;
+        if (req.session.user) {
+            const userid = req.session.userId
+            const userCart = await cartModel.findOne({ user: userid })
+            if (userCart) {
+                count = userCart.products.length
+            } else {
+                count = 0;
+            }
+            //count end
+            const users = req.session.userId
+            let userWish = await wishlistModel.findOne({ user: users })
+            if (userWish) {
+                countwish = userWish.products.length
+            } else {
+                countwish = 0;
+            }
+            //count end
+        }
+        const userId = req.session.userId
+        const user = await usermodel.findById(userId)
+        const { search } = req.query
+        const brand = await productModel.find().sort({ brand: 1 }).distinct('brand')
+        let products = await productModel.find({ name: { $regex: search } })
+
+        //filter
+        const name = req.query.name;
+        let product = await productModel.find({ isdelete: false }).populate()
+        let categories = await categoryModel.find()
+        product = product.filter((data) => {
+            if (data.category == name) return data
+        })
+
+        res.render('user/search', { products, brand, search, product, categories,count,countwish,user })
+    } catch (error) {
+        next(error)
+
+    }
+}
 
 
 

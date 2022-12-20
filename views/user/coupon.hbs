@@ -131,9 +131,10 @@
 
 <body>
     {{> userHeader}}
-    {{#each coupon}}
-    <div class="level container ">
-        <div class="card">
+     
+   <div class="container">
+         {{#each coupon}}
+        <div class=" card mt-5">
             <div class="main">
                 <div class="co-img ml-2">
                     <img style="height: 50px; width: 120px" src="/admin/images/electronicsAdmin.png" alt="" />
@@ -154,7 +155,10 @@
                 <button onclick="copyIt({{@index}})" class="copybtn" >COPY</button>
             </div>
         </div>
-    </div>
+       
+
+      {{/each}}
+      </div>
      <script>
 
         let copybtn = document.querySelector(".copybtn");
@@ -172,11 +176,10 @@
 
     </script>
 
-    {{/each}}
+  
 
 
-
+</body>
 
    
     {{> userFooter}}
-</body>

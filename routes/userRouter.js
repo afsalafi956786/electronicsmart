@@ -15,7 +15,7 @@ router.get('/logout',userController.user_logout)
 
 
 //otp authentication  
-
+router.get('/otp',userController.otp_page)
 router.post('/otp',userController.otp_Verify)
 
 //get user shop page  
@@ -71,6 +71,10 @@ router.post('/verify-payment',authentication.userAuthentication,userController.v
 
 //coupen view page
 router.get('/coupon',authentication.userAuthentication,userController.coupon_view)
+
+//live search 
+router.post('/livesearch',userController.live_search)
+router.get('/search',userController.search)
 
 
 

@@ -1,4 +1,18 @@
 <!-- Page Preloder -->
+
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+        integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<style>
+    .searchbtn {
+        padding: 3px 60px 4px 60;
+        border-radius: 4px;
+
+
+    }
+</style>
 <div id="preloder">
     <div class="loader"></div>
 </div>
@@ -21,23 +35,7 @@
     </div>
     <div id="mobile-menu-wrap"></div>
     <div class="offcanvas__auth">
-        <ul >
-            {{!-- <li><a href="/">Home</a></li>
-            <li><a href="/shop">Shop</a></li>
-            <li><a href="/contact.html">Contact</a></li> --}}
-            {{!-- {{#if user}}
-            <li><a href="/coupon">Offers</a></li>
-            <li><a href="#">Details</a>
-                <ul class="dropdown bg-white">
-                    <li><a style="text-decoration: none; color: black;" href="/account">Account</a></li>
 
-                    <li><a style="text-decoration: none; color: black;" href="/order-details">Orders</a></li>
-                    <li><a style="text-decoration: none; color: black;" href="/logout">Logout</a></li>
-                </ul>
-            </li>
-            {{/if}} --}}
-
-        </ul>
         <div class="dropdown">
             <button class="btn btn-success dropdown-toggle" type="button" data-bs-toggle="dropdown"
                 aria-expanded="false">
@@ -75,12 +73,14 @@
                     <ul>
                         <li><a href="/">Home</a></li>
                         <li><a href="/shop">Shop</a></li>
+
                         {{#if user}}
-                         <li><a href="/coupon">Offers</a></li>
+                        <li><a href="/coupon">Offers</a></li>
                         <li><a href="#">Details</a>
                             <ul class="dropdown bg-white">
                                 <li><a style="text-decoration: none; color: black;" href="/account">Address</a></li>
-                                 <li><a style="text-decoration: none; color: black;" href="/account-details">Account</a></li>
+                                <li><a style="text-decoration: none; color: black;" href="/account-details">Account</a>
+                                </li>
 
                                 <li><a style="text-decoration: none; color: black;" href="/order-details">Orders</a>
                                 </li>
@@ -88,8 +88,24 @@
                             </ul>
                         </li>
                         {{/if}}
+                       
+                            <li>
+                                <form action="/search" method="GET">
+                               
+                                <input type="search"  name="search" list="suggestion" onkeyup="search()" class="searchbtn"
+                                    id="SE" placeholder="search product">
+                                <button style="border: none;" type="submit" class="fa fa-search ml-2"  aria-hidden="true"></button>
+                             
+                                <datalist id="suggestion">
+                                    <option value=" Apple">
+                                </datalist> </form>
+                                
+                        </li>
+
 
                     </ul>
+
+
                 </nav>
             </div>
             <div class="col-lg-3">
@@ -138,3 +154,29 @@
     </div>
 </header>
 <!-- Header Section End -->
+<script>
+    function search() {
+        let id = document.getElementById('SE').value
+      $.ajax({
+        url:'/livesearch',
+        method:'post',
+        data:{
+            SE:id,
+        },
+        success:(response)=>{
+            console.log(response.products)
+            if(response.status){
+                let array=[]
+                response.products.forEach(element=>{
+                    array.push(`<option value='${element.name.substring(0,20)}'>`)
+                })
+                console.log(array)
+                $('suggestion').empty().append(array)
+
+            }
+        }
+      })
+
+    }
+
+</script>

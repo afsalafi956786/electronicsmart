@@ -19,6 +19,8 @@ let bannerMsg;
 
 
 
+
+
 // Get index page
 module.exports.admin_home = async (req, res, next) => {
     try {
@@ -172,17 +174,22 @@ module.exports.sale_report=async(req,res,next)=>{
 }
 
 // Get Admin Signin
-module.exports.admin_signin = (req, res) => {
-    adminSignin = req.session.admin
+module.exports.admin_signin = (req, res,next) => {
+    try {
+          adminSignin = req.session.admin
     if (adminSignin) {
         res.render('admin/index')
     } else {
         res.render('admin/signin')
     }
+    } catch (error) {
+      next(error)  
+    }
+  
 }
 
 //post admin Signin
-module.exports.admin_doSignin = async (req, res) => {
+module.exports.admin_doSignin = async (req, res,next) => {
     try {
         const adminData = req.body
 
@@ -205,18 +212,23 @@ module.exports.admin_doSignin = async (req, res) => {
             }
         }
     } catch (error) {
-        console.log(error);
+        next(error)
     }
 }
 //Admin Logout
-module.exports.admin_Logout = (req, res) => {
-    req.session.admin = false
+module.exports.admin_Logout = (req, res,next) => {
+    try {
+   req.session.admin = false
     res.redirect('/admin/signin')
+    } catch (error) {
+        next(error)
+    }
+
 
 }
 
 //user finding
-module.exports.view_user = async (req, res) => {
+module.exports.view_user = async (req, res,next) => {
     try {
         const userManage = req.body
         const adminId = req.session.adminId
@@ -225,12 +237,12 @@ module.exports.view_user = async (req, res) => {
         getUsers = await usermodel.find()
         res.render('admin/user', { getUsers, admin })
     } catch (error) {
-        console.log(error);
+        next(error)
     }
 
 }
 //Block Users
-module.exports.block_User = async (req, res) => {
+module.exports.block_User = async (req, res,next) => {
     try {
         const userId = req.query.userId
         console.log(userId);
@@ -238,23 +250,23 @@ module.exports.block_User = async (req, res) => {
         res.redirect('/admin/user')
 
     } catch (error) {
-        console.log(error);
+        next(error)
     }
 
 }
 //Active Users
-module.exports.Active_User = async (req, res) => {
+module.exports.Active_User = async (req, res,next) => {
     try {
         activeId = req.query.activeId
         console.log(activeId);
         await usermodel.findByIdAndUpdate(activeId, { isBanned: false })
         res.redirect('/admin/user')
     } catch (error) {
-        console.log(error);
+      next(error)
     }
 }
 //category page view
-module.exports.view_category = async (req, res) => {
+module.exports.view_category = async (req, res,next) => {
     try {
         const adminId = req.session.adminId
         const admin = await adminModel.findById(adminId)
@@ -262,26 +274,27 @@ module.exports.view_category = async (req, res) => {
         res.render('admin/category', { categories, msg1, admin })
         msg1 = false
     } catch (error) {
-        console.log(error);
+      next(error)
     }
 }
 //category add
-module.exports.add_category = async (req, res) => {
+module.exports.add_category = async (req, res,next) => {
     try {
 
         let category = req.body
+  
         category.imgCategory = req.files
         console.log(category);
         await categoryModel.create(category)
         msg1 = true
         res.redirect('/admin/category')
     } catch (error) {
-        console.log(error.message);
+        next(error)
     }
 }
 
 //category edit
-module.exports.edit_category = async (req, res) => {
+module.exports.edit_category = async (req, res,next) => {
     try {
         const { _id } = req.query
         const imgCategory = req.files
@@ -305,25 +318,25 @@ module.exports.edit_category = async (req, res) => {
         res.redirect('/admin/category')
 
     } catch (error) {
-        console.log(error.message);
+       next(error)
     }
 }
 
 //category delete
-module.exports.delete_category = async (req, res) => {
+module.exports.delete_category = async (req, res,next) => {
     try {
         const deleteId = req.params.id
         console.log(deleteId);
         await categoryModel.findByIdAndDelete(deleteId)
         res.redirect('/admin/category')
     } catch (error) {
-        console.log(error.message);
+        next(error)
     }
 
 }
 
 //product page view
-module.exports.view_product = async (req, res) => {
+module.exports.view_product = async (req, res,next) => {
 
     try {
         const adminId = req.session.adminId
@@ -331,26 +344,25 @@ module.exports.view_product = async (req, res) => {
         const getProducts = await productModel.find({ isdelete: false })
         res.render('admin/product', { getProducts, msg, admin });
         msg = false
-        editmesg = false
     } catch (error) {
-        console.log(error.message);
+     next(error)
     }
 
 }
 //view addProduct page
-module.exports.view_addProduct = async (req, res) => {
+module.exports.view_addProduct = async (req, res,next) => {
     try {
         const adminId = req.session.adminId
         const admin = await adminModel.findById(adminId)
         const categories = await categoryModel.find()
         res.render('admin/addProduct', { categories, admin })
     } catch (error) {
-        console.log(error.message);
+        next(error)
     }
 
 }
 //add product page
-module.exports.add_product = (req, res) => {
+module.exports.add_product = (req, res,next) => {
     try {
 
         const products = req.body;
@@ -359,11 +371,11 @@ module.exports.add_product = (req, res) => {
         msg = true;
         res.redirect('/admin/product')
     } catch (error) {
-        console.log(error.message);
+     next(error)
     }
 }
 //view edit product page
-module.exports.view_editProduct = async (req, res) => {
+module.exports.view_editProduct = async (req, res,next) => {
     const adminId = req.session.adminId
     const admin = await adminModel.findById(adminId)
     try {
@@ -372,13 +384,13 @@ module.exports.view_editProduct = async (req, res) => {
         const products = await productModel.findById(id)
         res.render('admin/editProduct', { products, categories, admin })
     } catch (error) {
-        console.log(error.message);
+       next(error)
     }
 
 }
 
 // edit products
-module.exports.edit_product = async (req, res) => {
+module.exports.edit_product = async (req, res,next) => {
     try {
         const { _id } = req.query
         const edit = req.body
@@ -390,6 +402,7 @@ module.exports.edit_product = async (req, res) => {
                 category: edit.category,
                 price: edit.price,
                 description: edit.description,
+                specification:edit.specification,
                 stock: edit.stock,
                 brand: edit.brand,
                 product_image: product_image
@@ -401,28 +414,29 @@ module.exports.edit_product = async (req, res) => {
                 category: edit.category,
                 price: edit.price,
                 description: edit.description,
+                specification:edit.specification,
                 stock: edit.stock,
                 brand: edit.brand,
 
             })
-
-        console.log(req.files);
+           
         res.redirect('/admin/product')
     } catch (error) {
+        next(error)
 
     }
 
 
 }
 //delete products
-module.exports.delete_product = async (req, res) => {
+module.exports.delete_product = async (req, res,next) => {
     try {
         productId = req.params.id
         console.log(productId)
         await productModel.findByIdAndUpdate(productId, { isdelete: true })
         res.redirect('/admin/product')
     } catch (error) {
-        console.log(error.message);
+        next(error)
     }
 }
 // const images=await productModel.findById(productId)

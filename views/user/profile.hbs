@@ -16,20 +16,20 @@
 
                 <div class="col-lg-8">
 
-                    
+
 
                     <form action="/add-address" method="POST" class="checkout__form">
 
                         <h5>Add address</h5>
 
                         <div class="row">
-                            
-                               
-                                <div class="checkout__form__input">
-                                    <p>Name <span>*</span></p>
-                                    <input type="text" name="name" id="name"  placeholder="Enter your name" required>
-                                </div>
-                          
+
+
+                            <div class="checkout__form__input">
+                                <p>Name <span>*</span></p>
+                                <input type="text" name="name" id="name" placeholder="Enter your name" required>
+                            </div>
+
 
                             <div class="col-lg-12">
                                 <div class="col col-md-12 col-lg-12">
@@ -37,31 +37,35 @@
                                 </div>
                                 <div class="col-12 col-md-12 col-lg-12">
                                     <textarea name="address" id="address" rows="5"
-                                        placeholder="Enter you delivery address" class="form-control" required></textarea>
+                                        placeholder="Enter you delivery address" class="form-control"
+                                        required></textarea>
                                 </div>
                                 <div class="checkout__form__input">
                                     <p> City/street<span>*</span></p>
-                                    <input type="text" name="city" id="city" placeholder="Enter your city or street" required>
+                                    <input type="text" name="city" id="city" placeholder="Enter your city or street"
+                                        required>
                                 </div>
-                                   <div class="checkout__form__input">
+                                <div class="checkout__form__input">
                                     <p>Pincode <span>*</span></p>
-                                    <input type="text" name="pincode" id="pincode" placeholder="Enter your pincode" required>
-                                </div>
-                    
-                            
-                                
-                                      <div class="checkout__form__input">
-                                    <p>Phone <span>*</span></p>
-                                    <input type="text"  name="phone" id="mobile" placeholder="Enter your mobile number" required>
+                                    <input type="text" name="pincode" id="pincode" placeholder="Enter your pincode"
+                                        required>
                                 </div>
 
-                                     <div class="checkout__form__input">
+
+
+                                <div class="checkout__form__input">
+                                    <p>Phone <span>*</span></p>
+                                    <input type="text" name="phone" id="mobile" placeholder="Enter your mobile number"
+                                        required>
+                                </div>
+
+                                <div class="checkout__form__input">
                                     <p>state<span>*</span></p>
                                     <input type="text" name="state" id="state" placeholder="Enter you state" required>
                                 </div>
-                                    <button type="submit" class="btn btn-success" href="#">
-                                        <i class="icon-shopping-cart icon-large"></i> Add Address</button>
-                            
+                                <button type="submit" class="btn btn-success" href="#">
+                                    <i class="icon-shopping-cart icon-large"></i> Add Address</button>
+
 
                             </div>
 
@@ -72,9 +76,9 @@
 
             {{!-- <address> --}}
 
-
                 <div class="row mt-5">
                     {{#each address.address}}
+                    
                     <div class="col-lg-4">
                         <div class="checkout__order">
                             <h5>Your Address</h5>
@@ -96,19 +100,100 @@
                             <div>
 
                             </div>
-                            <button style="border: none;color: rgb(255, 148, 9);" type="submit" class="btn btn mt-3" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                        <i class="icon-shopping-cart icon-large"></i> Edit</button>
-                            <button style="border: none;color:red" type="button" onclick="deleteAddress('{{this._id}}')" class="btn btn mt-3 ml-2">
+                            <button style="border: none;color: rgb(255, 148, 9);" type="submit" class="btn btn mt-3"
+                                data-bs-toggle="modal" data-bs-target="#exampleModal{{@index}}">
+                                <i class="icon-shopping-cart icon-large"></i> Edit</button>
+                            <button style="border: none;color:red" type="button" onclick="deleteAddress('{{this._id}}')"
+                                class="btn btn mt-3 ml-2">
                                 <i class="icon-shopping-cart icon-large"></i>Delete</button>
-                               
+
 
 
 
                         </div>
                     </div>
+                    <div class="modal fade" id="exampleModal{{@index}}" tabindex="-1"
+                        aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <form action="/edit-address?id={{@index}}" method="POST">
+                                <div class="modal-content">
+                                    <div class="modal-body">
+                                        <div class="col-lg-12">
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    <strong>Address</strong>
+
+                                                </div>
+                                                <div class="card-body card-block">
+                                                    <div class="form-group">
+                                                        <label for="country" class=" form-control-label">Name</label>
+                                                        <input type="text" name="name" id="name"
+                                                            value="{{this.name}}"
+                                                            placeholder="Enter your name" class="form-control" required>
+                                                    </div>
+                                                    <div class="col col-md-12 col-lg-12">
+                                                        <label for="" class="form-control-label ">Address</label>
+                                                    </div>
+                                                    <div class="col-12 col-md-12 col-lg-12">
+                                                        <textarea name="address" id="address" rows="9"
+                                                            placeholder="Enter you delivery address"
+                                                            class="form-control" value="{{this.address}}"
+                                                            required></textarea>
+                                                    </div>
+                                                    <div class="col-8">
+                                                        <div class="form-group">
+                                                            <label for="city"
+                                                                class=" form-control-label">City/street</label>
+                                                            <input type="text" name="city" id="city"
+                                                                value="{{this.city}}"
+                                                                placeholder="Enter your city or street"
+                                                                class="form-control" required>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-8">
+                                                        <div class="form-group">
+                                                            <label for="postal-code" class=" form-control-label">Pin
+                                                                code</label>
+                                                            <input type="number" name="pincode" id="pincode"
+                                                                value="{{this.pincode}}"
+                                                                placeholder="Enter your pin code" class="form-control"
+                                                                required>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="street" class=" form-control-label">phone</label>
+                                                        <input type="text" name="phone" id="mobile"
+                                                            value="{{this.phone}}"
+                                                            placeholder="Enter youe mobile number" class="form-control"
+                                                            required>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="country" class=" form-control-label">State</label>
+                                                        <input type="text" name="state" id="state" value="{{this.state}}"
+                                                            placeholder="Enter your state" class="form-control"
+                                                            required>
+                                                        {{!-- <input type="text" name="userId" id value="{{user._id}}"
+                                                            hidden> --}}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
 
 
-                    
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-danger"
+                                            data-bs-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-success">Save changes</button>
+                                    </div>
+
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+
+
                     {{/each}}
 
 
@@ -126,72 +211,7 @@
 
 
     <!-- Modal -->
-    <div class="modal fade" id="exampleModal{{@index}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <form action="/edit-address?id={{@index}}" method="POST">
-            <div class="modal-content">
-                    <div class="modal-body">
-                        <div class="col-lg-12">
-                            <div class="card">
-                                <div class="card-header">
-                                    <strong>Address</strong>
 
-                                </div>
-                                <div class="card-body card-block">
-                                    <div class="form-group">
-                                        <label for="country" class=" form-control-label">Name</label>
-                                        <input type="text" name="name" id="name" value="{{address.name}}"
-                                            placeholder="Enter your name" class="form-control"  required>
-                                    </div>
-                                    <div class="col col-md-12 col-lg-12">
-                                        <label for="" class="form-control-label ">Address</label>
-                                    </div>
-                                    <div class="col-12 col-md-12 col-lg-12">
-                                        <textarea name="address" id="address" rows="9"
-                                            placeholder="Enter you delivery address" class="form-control"
-                                            value="{{address.address}}"  required></textarea>
-                                    </div>
-                                    <div class="col-8">
-                                        <div class="form-group">
-                                            <label for="city" class=" form-control-label">City/street</label>
-                                            <input type="text" name="city" id="city" value="{{address.city}}"
-                                                placeholder="Enter your city or street" class="form-control" required>
-                                        </div>
-                                    </div>
-                                    <div class="col-8">
-                                        <div class="form-group">
-                                            <label for="postal-code" class=" form-control-label">Pin
-                                                code</label>
-                                            <input type="number" name="pincode" id="pincode" value="{{address.pincode}}"
-                                                placeholder="Enter your pin code" class="form-control"  required>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="street" class=" form-control-label">phone</label>
-                                        <input type="text" name="phone" id="mobile" value="{{address.phone}}"
-                                            placeholder="Enter youe mobile number" class="form-control"  required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="country" class=" form-control-label">State</label>
-                                        <input type="text" name="state" id="state" {{address.state}}
-                                            placeholder="Enter your state" class="form-control"  required>
-                                        {{!-- <input type="text" name="userId" id value="{{user._id}}" hidden> --}}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-success">Save changes</button>
-                    </div>
-                
-            </div>
-            </form>
-        </div>
-    </div>
 
     <!-- Checkout Section End -->
 
@@ -230,7 +250,7 @@
                     },
                     success: (response) => {
                         setTimeout(() => {
-                            window.location.href='/account'
+                            window.location.href = '/account'
 
                         }, 1500)
                     }
@@ -242,3 +262,29 @@
     }
 
 </script>
+
+    {{#if addressMsg}}
+    <script>
+        Swal.fire({
+            position: 'center',
+            icon: 'success',
+            title: 'Address is added',
+            showConfirmButton: false,
+            timer: 1500
+        })
+
+    </script>
+    {{/if}}
+
+    {{#if editMsg}}
+    <script>
+        Swal.fire({
+            position: 'center',
+            icon: 'success',
+            title: 'Address is updated',
+            showConfirmButton: false,
+            timer: 1500
+        })
+
+    </script>
+    {{/if}}
