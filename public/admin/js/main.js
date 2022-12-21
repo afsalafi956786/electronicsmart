@@ -402,7 +402,7 @@
       var myChart = new Chart(ctx, {
         type: 'line',
         data: {
-          labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', ''],
+          labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September','October', 'November', 'December'],
           datasets: [
             {
               label: 'My First dataset',
