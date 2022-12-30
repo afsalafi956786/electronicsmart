@@ -424,6 +424,7 @@
                                     success: (response) => {
 
                                         if (response.address == false) {
+                                            console.log(response)
                                             Swal.fire({
                                                 title: 'Create an address',
                                                 text: "You don't have an address !",

@@ -249,7 +249,7 @@ module.exports.view_shop = async (req, res, next) => {
         const products = await productModel.find({ isdelete: false })
         const userId = req.session.userId
         const user = await usermodel.findById(userId)
-        res.render('user/shop', { categories, products, user, count, countwish,brand })
+        res.render('user/shop', { categories, products, user, count, countwish, brand })
     } catch (error) {
         next(error)
     }
@@ -289,7 +289,7 @@ module.exports.do_filter = async (req, res, next) => {
             if (data.category == name) return data
         })
 
-        res.render('user/filter', { products, name, user,count, countwish,brand})
+        res.render('user/filter', { products, name, user, count, countwish, brand })
     } catch (error) {
         next(error)
 
@@ -340,6 +340,7 @@ module.exports.view_cart = async (req, res, next) => {
     try {
         countwish = 0;
         let count = 0;
+        let empty = null;
         if (req.session.user) {
             const userid = req.session.userId
             const userCart = await cartModel.findOne({ user: userid })
@@ -356,6 +357,7 @@ module.exports.view_cart = async (req, res, next) => {
             } else {
                 countwish = 0;
             }
+
             //count end
             const userId = req.session.userId
             const user = await usermodel.findById(userId)
@@ -365,15 +367,37 @@ module.exports.view_cart = async (req, res, next) => {
                 const total = cart.products.reduce((acc, cur) => (acc + cur.item.price * cur.quantity), 0)
                 res.render('user/cart', { cart, user, total, count, countwish })
             } else {
-                let empty = true
-                res.locals.empty = empty
-
+                countwish = 0;
+                let count = 0;
+                let empty;
+                if (req.session.user) {
+                    const userid = req.session.userId
+                    const userCart = await cartModel.findOne({ user: userid })
+                    if (userCart) {
+                        count = userCart.products.length
+                    } else {
+                        count = 0;
+                    }
+                    //count end
+                    const users = req.session.userId
+                    let userWish = await wishlistModel.findOne({ user: users })
+                    if (userWish) {
+                        countwish = userWish.products.length
+                    } else {
+                        countwish = 0;
+                    }
+                }
+                const userId = req.session.userId
+                const user = await usermodel.findById(userId)
+                empty='cart is empty';
+                res.render('user/cart',{empty,count,countwish,user})
             }
+
+
 
         }
 
     } catch (error) {
-        console.log(error);
         next(error)
     }
 
@@ -568,8 +592,6 @@ module.exports.view_wishlist = async (req, res, next) => {
             } else {
                 countwish = 0;
             }
-
-
             const wishlist = await wishlistModel.findOne({ user: userId }).populate('products.item')
             const user = await usermodel.findById(userId)
             res.render('user/wishlist', { user, count, wishlist, countwish })
@@ -833,58 +855,58 @@ module.exports.placing_order = async (req, res, next) => {
                     const userAddress = await addressModel.findOne({ user: userId })
                     if (userAddress != null) {
                         const codOrder = userAddress.address.at(takeAddress)
-                        if (codOrder != null) {
 
 
-                            //end address
-                            let orderObj = {
-                                address: {
-                                    name: codOrder.name,
-                                    address: codOrder.address,
-                                    city: codOrder.city,
-                                    state: codOrder.state,
-                                    pin: codOrder.pincode,
-                                    phone: codOrder.phone,
-                                },
-                                user: userId,
-                                payment: orders['payment-method'],
-                                products: products,
-                                total: total,
-                                status: status,
-                            }
 
-                            await orderModel.create(orderObj).then(async (data) => {
-                                let orderId = data._id.toString()
-                                if (req.body['payment-method'] === 'COD') {
-                                    res.json({ status: true })
-                                } else {
-                                    //razor pay
-                                    var instance = new Razorpay({
-                                        key_id: 'rzp_test_Qb7Rw3E5m4cY6D',
-                                        key_secret: 'uVtNyxp8HDTJbMLfaTXDkhqk',
-                                    });
-                                    let total = data.total
-                                    instance.orders.create({
-                                        amount: total * 100,
-                                        currency: 'INR',
-                                        receipt: orderId,
-                                    }, (err, order) => {
-                                        if (err) {
-                                            console.log(err);
-                                        } else {
-                                            console.log("new order:", order)
-                                            res.json({ status: false, order });
-                                        }
-                                    })
-
-                                }
-                                await cartModel.deleteOne({ user: userId })
-
-                            })
-                        } else {
-                            res.json({ address: false })
+                        //end address
+                        let orderObj = {
+                            address: {
+                                name: codOrder.name,
+                                address: codOrder.address,
+                                city: codOrder.city,
+                                state: codOrder.state,
+                                pin: codOrder.pincode,
+                                phone: codOrder.phone,
+                            },
+                            user: userId,
+                            payment: orders['payment-method'],
+                            products: products,
+                            total: total,
+                            status: status,
                         }
 
+                        await orderModel.create(orderObj).then(async (data) => {
+                            let orderId = data._id.toString()
+                            if (req.body['payment-method'] === 'COD') {
+                                res.json({ status: true })
+                            } else {
+                                //razor pay
+                                var instance = new Razorpay({
+                                    key_id: 'rzp_test_Qb7Rw3E5m4cY6D',
+                                    key_secret: 'uVtNyxp8HDTJbMLfaTXDkhqk',
+                                });
+                                let total = data.total
+                                instance.orders.create({
+                                    amount: total * 100,
+                                    currency: 'INR',
+                                    receipt: orderId,
+                                }, (err, order) => {
+                                    if (err) {
+                                        console.log(err);
+                                    } else {
+                                        console.log("new order:", order)
+                                        res.json({ status: false, order });
+                                    }
+                                })
+
+                            }
+                            await cartModel.deleteOne({ user: userId })
+
+                        })
+
+
+                    } else {
+                        res.json({ address: false })
                     }
                 }
             } else {
@@ -895,62 +917,57 @@ module.exports.placing_order = async (req, res, next) => {
             const userAddress = await addressModel.findOne({ user: userId })
             if (userAddress != null) {
                 const codOrder = userAddress.address.at(takeAddress)
-                if (codOrder != null) {
 
-
-
-                    //end address
-                    let orderObj = {
-                        address: {
-                            name: codOrder.name,
-                            address: codOrder.address,
-                            city: codOrder.city,
-                            state: codOrder.state,
-                            pin: codOrder.pincode,
-                            phone: codOrder.phone,
-                        },
-                        user: userId,
-                        payment: orders['payment-method'],
-                        products: products,
-                        total: total,
-                        status: status,
-                    }
-
-                    await orderModel.create(orderObj).then(async (data) => {
-                        let orderId = data._id.toString()
-                        if (req.body['payment-method'] === 'COD') {
-                            res.json({ status: true })
-                        } else {
-                            //razor pay
-                            var instance = new Razorpay({
-                                key_id: 'rzp_test_Qb7Rw3E5m4cY6D',
-                                key_secret: 'uVtNyxp8HDTJbMLfaTXDkhqk',
-                            });
-                            let total = data.total
-                            instance.orders.create({
-                                amount: total * 100,
-                                currency: 'INR',
-                                receipt: orderId,
-                            }, (err, order) => {
-                                if (err) {
-                                    console.log(err);
-                                } else {
-                                    console.log("new order:", order)
-                                    res.json({ status: false, order });
-                                }
-                            })
-
-                        }
-                        await cartModel.deleteOne({ user: userId })
-
-                    })
-                } else {
-                    res.json({ address: false })
+                //end address
+                let orderObj = {
+                    address: {
+                        name: codOrder.name,
+                        address: codOrder.address,
+                        city: codOrder.city,
+                        state: codOrder.state,
+                        pin: codOrder.pincode,
+                        phone: codOrder.phone,
+                    },
+                    user: userId,
+                    payment: orders['payment-method'],
+                    products: products,
+                    total: total,
+                    status: status,
                 }
+
+                await orderModel.create(orderObj).then(async (data) => {
+                    let orderId = data._id.toString()
+                    if (req.body['payment-method'] === 'COD') {
+                        res.json({ status: true })
+                    } else {
+                        //razor pay
+                        var instance = new Razorpay({
+                            key_id: 'rzp_test_Qb7Rw3E5m4cY6D',
+                            key_secret: 'uVtNyxp8HDTJbMLfaTXDkhqk',
+                        });
+                        let total = data.total
+                        instance.orders.create({
+                            amount: total * 100,
+                            currency: 'INR',
+                            receipt: orderId,
+                        }, (err, order) => {
+                            if (err) {
+                                console.log(err);
+                            } else {
+                                console.log("new order:", order)
+                                res.json({ status: false, order });
+                            }
+                        })
+
+                    }
+                    await cartModel.deleteOne({ user: userId })
+
+                })
+
+            } else {
+                res.json({ address: false })
             }
-            // else {
-            //     res.json({ address: false })
-            // }
+
 
         }
 
@@ -1038,7 +1055,7 @@ module.exports.order_success = async (req, res, next) => {
         let date = new Date();
         const createdAt = order.createdAt
         order.date = moment(createdAt).format("DD MMMM , YYYY");
-        res.render('user/orderSuccess', { order, user, count, countwish,address })
+        res.render('user/orderSuccess', { order, user, count, countwish, address })
     } catch (error) {
         next(error)
 
@@ -1204,7 +1221,7 @@ module.exports.account_details = async (req, res, next) => {
         }
         const userId = req.session.userId
         const user = await usermodel.findById(userId)
-        res.render('user/accountDetails', {msg, user,count,countwish })
+        res.render('user/accountDetails', { msg, user, count, countwish })
         msg = false
     } catch (error) {
         next(error)
@@ -1239,47 +1256,20 @@ module.exports.change_details = async (req, res, next) => {
         const { name, email, currPass, newPass, confirmPass } = req.body
         const userId = req.session.userId
         const user = await usermodel.findById(userId)
-            if (newPass == confirmPass) {
-                let newPassword = await bcrypt.compare(currPass, user.password)
-                console.log(newPassword)
-                if (newPassword) {
-                    newPassword = await bcrypt.hash(newPass, 10)
-                    await usermodel.findByIdAndUpdate(userId, {
-                        $set: {
-                            name: name,
-                            email: email,
-                            password: newPassword,
-                        }
-                    })
-                    msg = true;
-                    res.redirect('/account-details',user,count,countwish)
-
-                } else {
-                    countwish = 0;
-                    let count = 0;
-                    if (req.session.user) {
-                        const userid = req.session.userId
-                        const userCart = await cartModel.findOne({ user: userid })
-                        if (userCart) {
-                            count = userCart.products.length
-                        } else {
-                            count = 0;
-                        }
-                        //count end
-                        const users = req.session.userId
-                        let userWish = await wishlistModel.findOne({ user: users })
-                        if (userWish) {
-                            countwish = userWish.products.length
-                        } else {
-                            countwish = 0;
-                        }
-                        //count end
+        if (newPass == confirmPass) {
+            let newPassword = await bcrypt.compare(currPass, user.password)
+            console.log(newPassword)
+            if (newPassword) {
+                newPassword = await bcrypt.hash(newPass, 10)
+                await usermodel.findByIdAndUpdate(userId, {
+                    $set: {
+                        name: name,
+                        email: email,
+                        password: newPassword,
                     }
-                    const userId = req.session.userId
-                    const user = await usermodel.findById(userId)
-                  
-                    res.render('user/accountDetails', { currentPass: 'current password is not matched',count,user,countwish })
-                }
+                })
+                msg = true;
+                res.redirect('/account-details', user, count, countwish)
 
             } else {
                 countwish = 0;
@@ -1304,10 +1294,37 @@ module.exports.change_details = async (req, res, next) => {
                 }
                 const userId = req.session.userId
                 const user = await usermodel.findById(userId)
-                res.render('user/accountDetails', { confirmErr: 'Confirm password is not matched',user,count,countwish})
 
+                res.render('user/accountDetails', { currentPass: 'current password is not matched', count, user, countwish })
             }
-        
+
+        } else {
+            countwish = 0;
+            let count = 0;
+            if (req.session.user) {
+                const userid = req.session.userId
+                const userCart = await cartModel.findOne({ user: userid })
+                if (userCart) {
+                    count = userCart.products.length
+                } else {
+                    count = 0;
+                }
+                //count end
+                const users = req.session.userId
+                let userWish = await wishlistModel.findOne({ user: users })
+                if (userWish) {
+                    countwish = userWish.products.length
+                } else {
+                    countwish = 0;
+                }
+                //count end
+            }
+            const userId = req.session.userId
+            const user = await usermodel.findById(userId)
+            res.render('user/accountDetails', { confirmErr: 'Confirm password is not matched', user, count, countwish })
+
+        }
+
 
     } catch (error) {
         console.log(error)
@@ -1368,7 +1385,7 @@ module.exports.search = async (req, res, next) => {
             if (data.category == name) return data
         })
 
-        res.render('user/search', { products, brand, search, product, categories,count,countwish,user })
+        res.render('user/search', { products, brand, search, product, categories, count, countwish, user })
     } catch (error) {
         next(error)
 

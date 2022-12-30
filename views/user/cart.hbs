@@ -19,16 +19,11 @@
         </div>
     </div>
     <!-- Breadcrumb End -->
-
+{{!-- /admin/productImage/empty-cart (1).png --}}
     <!-- Shop Cart Section Begin -->
-    {{!--
-    {{#if empty}}
 
-    <div>
-        <img src="/admin/productImage/empty-cart (1).png">
+    {{#if cart.products}}
 
-    </div>
-    {{else}} --}}
     <section class="shop-cart spad">
         <div class="container">
             <div class="row">
@@ -126,8 +121,20 @@
         </div>
         </div>
     </section>
+        {{else}}
+       <div style="width: auto; height: auto;" class="text-center pt-2">
+                <img class="img-fluid" src="/admin/productImage/empty-cart (1).png" alt="">
+            </div>
 
-    {{!-- {{/if}} --}}
+
+    {{/if}}
+
+    {{#if empty}}
+       <div style="width: auto; height: auto;" class="text-center pt-2">
+                <img class="img-fluid" src="/admin/productImage/empty-cart (1).png" alt="">
+            </div>
+            {{/if}}
+
 
 
     <!-- Shop Cart Section End -->
@@ -196,7 +203,7 @@
 
                     } else {
                         document.getElementById(prodId).innerHTML = quantity + count
-                        $('#total').html('$ ' + response.total)
+                        $('#total').html('₹ ' + response.total)
 
                     }
                 }
