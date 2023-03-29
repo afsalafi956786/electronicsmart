@@ -402,6 +402,7 @@
                         for (address of address) {
                             if (address.checked) {
                                 checkAddress = address.value
+                            
                                 break
 
                             }
@@ -409,7 +410,7 @@
 
                         Swal.fire({
                             title: 'Are you sure?',
-                            text: "Are you sure want to confirm this order",
+                            text: "Are you sure want to confirm this orfdsfder",
                             icon: 'warning',
                             showCancelButton: true,
                             confirmButtonColor: '#3085d6',
@@ -422,9 +423,8 @@
                                     method: 'post',
                                     data: $('#checkout-form').serialize() + '&radiobtn=' + checkAddress + '&coupon=' + coupons,
                                     success: (response) => {
-
-                                        if (response.address == false) {
-                                            console.log(response)
+                                      console.log(response,'0000000')
+                                        if (response.address === false) {
                                             Swal.fire({
                                                 title: 'Create an address',
                                                 text: "You don't have an address !",
