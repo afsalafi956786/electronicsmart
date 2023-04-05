@@ -1012,7 +1012,7 @@ module.exports.placing_order = async (req, res, next) => {
 
     //adding default address radio button
   } catch (error) {
-    res.json({address:false})
+    res.send({address:false})
     next(error);
   }
 };
