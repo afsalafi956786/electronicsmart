@@ -894,6 +894,7 @@ module.exports.placing_order = async (req, res, next) => {
           }
           const takeAddress = orders.radiobtn;
           const userAddress = await addressModel.findOne({ user: userId });
+          console.log(userAddress,'_____________');
           if (userAddress != null) {
             const codOrder = userAddress.address.at(takeAddress);
             //end address
@@ -1011,7 +1012,7 @@ module.exports.placing_order = async (req, res, next) => {
 
     //adding default address radio button
   } catch (error) {
-  
+    res.json({address:false})
     next(error);
   }
 };
