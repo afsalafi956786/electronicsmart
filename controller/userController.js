@@ -849,7 +849,6 @@ module.exports.place_order = async (req, res, next) => {
     );
     const product = cart.products;
     const address = await addressModel.findOne({ user: userId });
-    console.log(address,'((((((((((')
     res.render("user/placeOrder", {
       total,
       address,
@@ -875,8 +874,7 @@ module.exports.placing_order = async (req, res, next) => {
       .populate("products.item");
     let products = cart.products;
     let total = cart.products.reduce(
-      (acc, cur) => acc + cur.item.price * cur.quantity,
-      0
+      (acc, cur) => acc + cur.item.price * cur.quantity,0
     );
     let status = orders["payment-method"] === "COD" ? "placed" : "pending";
     if (coupon) {
@@ -894,8 +892,7 @@ module.exports.placing_order = async (req, res, next) => {
           }
           const takeAddress = orders.radiobtn;
           const userAddress = await addressModel.findOne({ user: userId });
-          console.log(userAddress,'_____________');
-          if (userAddress != null) {
+          if (userAddress.address != null) {
             const codOrder = userAddress.address.at(takeAddress);
             //end address
             let orderObj = {
@@ -954,9 +951,8 @@ module.exports.placing_order = async (req, res, next) => {
     } else {
       const takeAddress = orders.radiobtn;
       const userAddress = await addressModel.findOne({ user: userId });
-      if (userAddress != null) {
+      if (userAddress.address != null) {
         const codOrder = userAddress.address.at(takeAddress);
-        console.log(codOrder,'...........')
 
         //end address
         let orderObj = {
@@ -1012,7 +1008,8 @@ module.exports.placing_order = async (req, res, next) => {
 
     //adding default address radio button
   } catch (error) {
-    res.send({address:false})
+    // res.send({address:false})
+    console.log(error.message);
     next(error);
   }
 };
